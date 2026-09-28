@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Metric audit - 15GEMSDOE</title><style>
+:root{--ink:#15181d;--mut:#5b6472;--line:#e3e7ee;--bg:#fbfcfe;--acc:#0b5fa5;
+--ok:#0f7b3f;--warn:#a3540a;--bad:#a01b1b;--card:#fff}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+color:var(--ink);background:var(--bg)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:14px 0;position:sticky;top:0;z-index:9}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+nav a{margin-right:16px;color:var(--acc);text-decoration:none;font-weight:600;font-size:14px}
+nav a:hover{text-decoration:underline}
+h1{font-size:28px;margin:26px 0 6px}
+h2{font-size:20px;margin:30px 0 8px;padding-top:6px}
+h3{font-size:16px;margin:18px 0 4px}
+p,li{color:var(--ink)}
+.mut{color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0}
+.cta{border:2px solid var(--ok);border-radius:12px;background:#f3fbf6;padding:20px;margin:16px 0}
+.cta h2{margin-top:0;color:var(--ok)}
+a.btn{display:inline-block;background:var(--ok);color:#fff;padding:12px 20px;border-radius:8px;
+text-decoration:none;font-weight:700;font-size:17px}
+a.btn:hover{background:#0b6132}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px}
+pre{background:#0f172a;color:#e6edf7;padding:12px;border-radius:8px;overflow:auto}
+code{background:#eef2f7;padding:1px 5px;border-radius:4px}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f2f5f9}
+tr:nth-child(even) td{background:#fcfdff}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12.5px;font-weight:700}
+.ok{background:#e7f7ee;color:var(--ok)}.warn{background:#fdf1e3;color:var(--warn)}
+.bad{background:#fdeaea;color:var(--bad)}
+.q{border-left:3px solid var(--acc);padding:2px 0 2px 12px;margin:10px 0;color:#25303f}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 0;color:var(--mut);font-size:13.5px}
+ul.tight{margin:6px 0}
+</style></head><body><header><div class="wrap"><nav><a href="index.html">Home</a><a href="executive_summary.html">How to submit</a><a href="metric_audit.html" style="color:#15181d">Metric audit</a><a href="holdout.html">Holdout</a><a href="hypotheses.html">Hypotheses</a><a href="sources.html">Sources</a></nav></div></header><div class="wrap"><h1>Metric audit: the score, before the model</h1><p>Re-derived from the published equations and checked against the problem page's own worked example. <code>python scripts/verify_metric.py</code>; raw output in <code>docs/evidence/metric_audit.json</code>.</p><div class="card"><h3>Transcription</h3><pre>k(d)  = max(1 - d/R, 0),  R = 300 m
+TP_w  = sum over truth pixels of max over the kernel of pred(x)*k(d(x,g))
+FP_w  = sum over predicted pixels of pred(x)*(1 - max_g k(d(x,g)))
+FN_w  = sum over truth pixels of (1 - that same max)
+DTI   = TP_w / (TP_w + 0.2*FP_w + 0.8*FN_w)</pre><p class="q">Official worked example: TP_w 3.00, FP_w 1.89, FN_w 2.00 &rarr; 3.00 / (3.00 + 0.2&middot;1.89 + 0.8&middot;2.00) = 3.00 / 4.978 = <strong>0.6027 &rarr; 0.60</strong>, which is the 0.60 printed on the page.</p></div><h2>The four consequences, each proved</h2><ol><li><strong>Reduction.</strong> TP_w + FN_w = |G| exactly, so DTI = 1/(0.8/R_w + 0.2/P_w): a weighted harmonic mean of weighted recall (weight 0.8) and weighted precision (weight 0.2). Residual 5.6e-17 on random rasters.</li><li><strong>Marginal rule.</strong> A block of predictions pays off iff its own weighted precision exceeds 0.2 &times; DTI. At the current leader's 0.3168 that is a bar of <strong>0.0634</strong>.</li><li><strong>Binary optimum.</strong> DTI(t&middot;p) is strictly increasing in t, so pushing values toward 1 always helps and the best map is 0/1; the graded field is only a ranking device.</li><li><strong>Recall versus precision.</strong> d&nbsp;ln&nbsp;DTI ratio is 4P/R, so a relative recall gain beats an equal relative precision gain whenever P &gt; R/4.</li></ol><h2>Why this dictates a much wider map than a 0.5 cutoff</h2><p>A lone pixel pays for itself out to <strong>281 m (2.81 px)</strong> at DTI 0.3168, and the bar a block must clear is only 6.3% precision. Suppressing anything below a calibrated 0.5 throws away mass that the metric still pays for. That prediction is what the holdout then measured.</p><h2>Check results</h2><table><tr><th>Check</th><th>Status</th><th>Detail</th></tr><tr><td>A_worked_example</td><td><span class="pill ok">pass</span></td><td>4.978</td></tr><tr><td>E_marginal_rule</td><td><span class="pill ok">pass</span></td><td></td></tr><tr><td>F_scaling_monotone</td><td><span class="pill ok">pass</span></td><td></td></tr><tr><td>G_elasticity</td><td><span class="pill ok">pass</span></td><td></td></tr></table><h2>Implementation equivalence</h3><p>Three independent implementations - a vectorised one, a literal loop-for-loop transcription of the published equations, and a fast scorer used for sweeps - agree to 7.2e-08. The literal transcription is what licenses the vectorised one.</p></div><footer><div class="wrap">15GEMSDOE - DOE GEMS Prize (DrivenData competition 306). Every number on this site is generated from docs/evidence/*.json by scripts/build_site.py. Built 2026-09-28 20:00 UTC.</div></footer></body></html>

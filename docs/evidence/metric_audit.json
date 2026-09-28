@@ -1,0 +1,234 @@
+{
+ "alpha": 0.2,
+ "beta": 0.8,
+ "kernel_range_m": 300.0,
+ "pixel_m": 100.0,
+ "A_worked_example": {
+  "stated_by_page": 0.6,
+  "denominator": 4.978,
+  "denominator_expanded": "3.00 + 0.2*1.89 + 0.8*2.00",
+  "computed": 0.6026516673362796,
+  "rounded_2dp": 0.6,
+  "harmonic_form": 0.6026516673362795,
+  "recall_w": 0.6,
+  "precision_w": 0.6134969325153374,
+  "matches": true
+ },
+ "B_implementations_agree_max_abs_diff": 7.233249471605419e-08,
+ "C_tp_plus_fn_equals_ng_max_abs_residual": 0.0,
+ "D_harmonic_reduction_max_abs_residual": 5.551115123125783e-17,
+ "B_matches": true,
+ "C_matches": true,
+ "D_matches": true,
+ "E_marginal_rule": {
+  "base_dti": 0.3147282097412775,
+  "alpha_times_dti": 0.06294564194825551,
+  "trials": [
+   {
+    "pixel": [
+     10,
+     10
+    ],
+    "block_weighted_precision": 1.0,
+    "threshold_alpha_times_dti": 0.06294564194825551,
+    "rule_says_pays": true,
+    "actual_dti_up": true,
+    "rule_correct": true
+   },
+   {
+    "pixel": [
+     30,
+     30
+    ],
+    "block_weighted_precision": 1.0,
+    "threshold_alpha_times_dti": 0.06294564194825551,
+    "rule_says_pays": true,
+    "actual_dti_up": true,
+    "rule_correct": true
+   },
+   {
+    "pixel": [
+     35,
+     35
+    ],
+    "block_weighted_precision": 0.0,
+    "threshold_alpha_times_dti": 0.06294564194825551,
+    "rule_says_pays": false,
+    "actual_dti_up": false,
+    "rule_correct": true
+   },
+   {
+    "pixel": [
+     0,
+     0
+    ],
+    "block_weighted_precision": 0.0,
+    "threshold_alpha_times_dti": 0.06294564194825551,
+    "rule_says_pays": false,
+    "actual_dti_up": false,
+    "rule_correct": true
+   },
+   {
+    "pixel": [
+     20,
+     20
+    ],
+    "block_weighted_precision": 0.0,
+    "threshold_alpha_times_dti": 0.06294564194825551,
+    "rule_says_pays": false,
+    "actual_dti_up": false,
+    "rule_correct": true
+   },
+   {
+    "pixel": [
+     11,
+     12
+    ],
+    "block_weighted_precision": 0.8627358538150423,
+    "threshold_alpha_times_dti": 0.06294564194825551,
+    "rule_says_pays": true,
+    "actual_dti_up": true,
+    "rule_correct": true
+   },
+   {
+    "pixel": [
+     29,
+     32
+    ],
+    "block_weighted_precision": 1.0,
+    "threshold_alpha_times_dti": 0.06294564194825551,
+    "rule_says_pays": true,
+    "actual_dti_up": true,
+    "rule_correct": true
+   }
+  ],
+  "single_pixel_distance_sweep": [
+   {
+    "distance_px": 0,
+    "dti": 0.3147282097412775,
+    "dti_up": false
+   },
+   {
+    "distance_px": 1,
+    "dti": 0.3829792574013696,
+    "dti_up": true
+   },
+   {
+    "distance_px": 2,
+    "dti": 0.3829792574013696,
+    "dti_up": true
+   },
+   {
+    "distance_px": 3,
+    "dti": 0.35565121602851746,
+    "dti_up": true
+   },
+   {
+    "distance_px": 4,
+    "dti": 0.3129824860208089,
+    "dti_up": false
+   }
+  ],
+  "all_trials_consistent": true,
+  "self_financing_distance_m_at_base": 281.11630741552335
+ },
+ "F_scaling_monotone": {
+  "scales": [
+   0.05,
+   0.1,
+   0.2,
+   0.4,
+   0.6,
+   0.8,
+   1.0
+  ],
+  "dti": [
+   0.040557932285057774,
+   0.08030388157161482,
+   0.15745545373660721,
+   0.30301608452191675,
+   0.43798072350752615,
+   0.5634656879340796,
+   0.6804360446561026
+  ],
+  "strictly_increasing": true,
+  "limit_precision_over_alpha": 0.6804360446561026,
+  "note": "DTI(t) = t*TP_w / (beta|G| + alpha*t*(TP_w+FP_w)) is increasing in t; the supremum is P_w/alpha, so the optimum is the binary indicator of the support, at value 1."
+ },
+ "G_elasticity": {
+  "formula": "(d ln DTI / d ln R) / (d ln DTI / d ln P) = (beta/alpha) * P/R = 4 P/R",
+  "rows": [
+   {
+    "precision_w": 0.2,
+    "recall_w": 0.6,
+    "ratio": 1.3333333333333335,
+    "recall_gain_wins": true,
+    "boundary_P_over_R": 0.33333333333333337,
+    "predicted_wins_iff_P_gt_R_over_4": true
+   },
+   {
+    "precision_w": 0.3,
+    "recall_w": 0.6,
+    "ratio": 2.0,
+    "recall_gain_wins": true,
+    "boundary_P_over_R": 0.5,
+    "predicted_wins_iff_P_gt_R_over_4": true
+   },
+   {
+    "precision_w": 0.15,
+    "recall_w": 0.6,
+    "ratio": 1.0,
+    "recall_gain_wins": false,
+    "boundary_P_over_R": 0.25,
+    "predicted_wins_iff_P_gt_R_over_4": true
+   },
+   {
+    "precision_w": 0.1,
+    "recall_w": 0.5,
+    "ratio": 0.8,
+    "recall_gain_wins": false,
+    "boundary_P_over_R": 0.2,
+    "predicted_wins_iff_P_gt_R_over_4": true
+   },
+   {
+    "precision_w": 0.5,
+    "recall_w": 0.5,
+    "ratio": 4.0,
+    "recall_gain_wins": true,
+    "boundary_P_over_R": 1.0,
+    "predicted_wins_iff_P_gt_R_over_4": true
+   }
+  ],
+  "all_consistent": true
+ },
+ "strategic_constants": {
+  "leader_2026-09-28": {
+   "dti": 0.3168,
+   "marginal_precision_bar": 0.06336000000000001,
+   "self_financing_radius_m": 280.992,
+   "self_financing_radius_px": 2.80992,
+   "recall_penalty_factor_beta": 0.8,
+   "precision_penalty_factor_alpha": 0.2,
+   "max_affordable_dti_from_precision": 5.0
+  },
+  "group_best_reported": {
+   "dti": 0.1563,
+   "marginal_precision_bar": 0.03126,
+   "self_financing_radius_m": 290.622,
+   "self_financing_radius_px": 2.9062200000000002,
+   "recall_penalty_factor_beta": 0.8,
+   "precision_penalty_factor_alpha": 0.2,
+   "max_affordable_dti_from_precision": 5.0
+  },
+  "boundary_2026-09-14": {
+   "dti": 0.3049,
+   "marginal_precision_bar": 0.060980000000000006,
+   "self_financing_radius_m": 281.706,
+   "self_financing_radius_px": 2.81706,
+   "recall_penalty_factor_beta": 0.8,
+   "precision_penalty_factor_alpha": 0.2,
+   "max_affordable_dti_from_precision": 5.0
+  }
+ },
+ "all_checks_pass": true
+}

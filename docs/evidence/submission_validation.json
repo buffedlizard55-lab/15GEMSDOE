@@ -1,0 +1,103 @@
+{
+ "file": "/home/user/15GEMSDOE/docs/downloads/gems-cleanup-a-20260928T195952Z-curv_scarp.tif",
+ "checks": {
+  "R1_crs_epsg32611": {
+   "passed": true,
+   "detail": "EPSG:32611"
+  },
+  "R2_resolution_100m": {
+   "passed": true,
+   "detail": [
+    100.0,
+    100.0
+   ]
+  },
+  "R4a_single_band": {
+   "passed": true,
+   "detail": 1
+  },
+  "R4b_float32": {
+   "passed": true,
+   "detail": "float32"
+  },
+  "R3a_bounds_match_reference": {
+   "passed": true,
+   "detail": [
+    243350.0,
+    4135550.0,
+    572550.0,
+    4508550.0
+   ]
+  },
+  "R3b_shape_match_reference": {
+   "passed": true,
+   "detail": [
+    3292,
+    3730
+   ]
+  },
+  "R3c_crs_match_reference": {
+   "passed": true,
+   "detail": "EPSG:32611"
+  },
+  "R3d_transform_match_reference": {
+   "passed": true,
+   "detail": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ]
+  },
+  "R3e_nan_outside_footprint": {
+   "passed": true,
+   "detail": {
+    "reference_finite_px": 5167373,
+    "our_finite_px": 5167373,
+    "finite_where_reference_nan": 0,
+    "nan_where_reference_finite": 0
+   }
+  },
+  "R4c_values_in_unit_interval": {
+   "passed": true,
+   "detail": {
+    "min": 0.0,
+    "max": 1.0
+   }
+  },
+  "R4d_no_negative": {
+   "passed": true,
+   "detail": 0
+  },
+  "R4e_not_empty": {
+   "passed": true,
+   "detail": "an all-zero submission scores 0; the shipped sample_submission.tif is the catalogue raster and also scores 0 once known faults are masked"
+  }
+ },
+ "ok": true,
+ "profile": {
+  "width": 3292,
+  "height": 3730,
+  "count": 1,
+  "dtypes": [
+   "float32"
+  ],
+  "crs": "EPSG:32611",
+  "res": [
+   100.0,
+   100.0
+  ],
+  "nodata": NaN,
+  "bounds": [
+   243350.0,
+   4135550.0,
+   572550.0,
+   4508550.0
+  ]
+ },
+ "emitted_px": 362327,
+ "finite_px": 5167373,
+ "fraction_emitted_of_footprint": 0.07011822061229178
+}
