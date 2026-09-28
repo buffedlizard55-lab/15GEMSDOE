@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>How to submit - 15GEMSDOE</title><style>
+:root{--ink:#15181d;--mut:#5b6472;--line:#e3e7ee;--bg:#fbfcfe;--acc:#0b5fa5;
+--ok:#0f7b3f;--warn:#a3540a;--bad:#a01b1b;--card:#fff}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+color:var(--ink);background:var(--bg)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:14px 0;position:sticky;top:0;z-index:9}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+nav a{margin-right:16px;color:var(--acc);text-decoration:none;font-weight:600;font-size:14px}
+nav a:hover{text-decoration:underline}
+h1{font-size:28px;margin:26px 0 6px}
+h2{font-size:20px;margin:30px 0 8px;padding-top:6px}
+h3{font-size:16px;margin:18px 0 4px}
+p,li{color:var(--ink)}
+.mut{color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0}
+.cta{border:2px solid var(--ok);border-radius:12px;background:#f3fbf6;padding:20px;margin:16px 0}
+.cta h2{margin-top:0;color:var(--ok)}
+a.btn{display:inline-block;background:var(--ok);color:#fff;padding:12px 20px;border-radius:8px;
+text-decoration:none;font-weight:700;font-size:17px}
+a.btn:hover{background:#0b6132}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px}
+pre{background:#0f172a;color:#e6edf7;padding:12px;border-radius:8px;overflow:auto}
+code{background:#eef2f7;padding:1px 5px;border-radius:4px}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f2f5f9}
+tr:nth-child(even) td{background:#fcfdff}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12.5px;font-weight:700}
+.ok{background:#e7f7ee;color:var(--ok)}.warn{background:#fdf1e3;color:var(--warn)}
+.bad{background:#fdeaea;color:var(--bad)}
+.q{border-left:3px solid var(--acc);padding:2px 0 2px 12px;margin:10px 0;color:#25303f}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 0;color:var(--mut);font-size:13.5px}
+ul.tight{margin:6px 0}
+</style></head><body><header><div class="wrap"><nav><a href="index.html">Home</a><a href="executive_summary.html" style="color:#15181d">How to submit</a><a href="metric_audit.html">Metric audit</a><a href="holdout.html">Holdout</a><a href="hypotheses.html">Hypotheses</a><a href="sources.html">Sources</a></nav></div></header><div class="wrap"><h1>How to make a submission</h1><p>This page is the whole procedure. It exists because a previous download was rejected with <em>&ldquo;Predicted values must be in range [0, 1]&rdquo;</em>.</p><div class="cta"><h2>Download the submission file</h2><p><a class="btn" href="downloads/gems-cleanup-a-20260928T195952Z-curv_scarp.tif" download>Download gems-cleanup-a-20260928T195952Z-curv_scarp.tif</a></p><p class="mut" style="margin-bottom:0">628807 bytes &middot; SHA-256 <code>3e88e6ad5c63f2bc37edebd0eb2c7332d97ba1e48308f7ffea3b7c63fc2bddd1</code> &middot; single band float32 &middot; EPSG:32611 &middot; 100 m &middot; NaN outside the footprint &middot; every finite value in [0, 1]</p></div><h2>Step by step</h2><ol><li>Sign in to DrivenData and enrol in the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">GEMS Prize Challenge</a>.</li><li>Press the green <strong>Download</strong> button above. One <code>.tif</code> file. No zip, no extra files.</li><li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">Submit</a> &rarr; <strong>Make new submission</strong>.</li><li>Choose the file you downloaded.</li><li>Paste this into <strong>Note (optional)</strong>:<pre>15GEMSDOE clean-up A | curv_scarp ridge | area 4.0e+05 px (7.01% of footprint) | nms 1 width 1 | holdout DTI 0.05224 | 3e88e6ad</pre></li><li>Press <strong>Submit</strong>. The public score appears on the leaderboard.</li></ol><h2>What the file is, exactly</h2><table><tr><th>Property</th><th>Required (problem description)</th><th>This file</th></tr><tr><td>CRS</td><td>EPSG:32611 (UTM 11N)</td><td>32611</td></tr><tr><td>Resolution</td><td>100 m</td><td>100.0 m</td></tr><tr><td>Bounds</td><td>same as training data</td><td>[243350.0, 4135550.0, 572550.0, 4508550.0]</td></tr><tr><td>Outside bounds</td><td>null or nan</td><td>NaN (5,167,373 cells)</td></tr><tr><td>Bands</td><td>single layer</td><td>1</td></tr><tr><td>Datatype</td><td>float32</td><td>float32</td></tr><tr><td>Values</td><td>between 0 and 1</td><td>min 0.0, max 1.0</td></tr></table><h2>If the site ever hands you a broken file</h2><p>Do not upload it. Run:</p><pre>python scripts/validate_submission.py docs/downloads/&lt;file&gt;.tif \
+    --reference data/raw/sample_submission.tif</pre><p>It re-derives CRS, resolution, bounds, transform, band count, datatype and the [0, 1] range from the file on disk and prints <code>READY TO UPLOAD</code> or <code>DO NOT UPLOAD</code>. The range check is the one that failed before.</p><h2>Budget</h2><p>Three submissions per week, and the allowance resets on a <em>rolling window</em>, not at a fixed time (chrisk-dd, 2026-09-17, <a href="https://community.drivendata.org/t/weekly-submissions/11524/2">forum 11524</a>). Nothing here spends a slot.</p></div><footer><div class="wrap">15GEMSDOE - DOE GEMS Prize (DrivenData competition 306). Every number on this site is generated from docs/evidence/*.json by scripts/build_site.py. Built 2026-09-28 20:00 UTC.</div></footer></body></html>

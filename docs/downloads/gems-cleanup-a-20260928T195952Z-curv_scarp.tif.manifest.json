@@ -1,0 +1,40 @@
+{
+ "file": "docs/downloads/gems-cleanup-a-20260928T195952Z-curv_scarp.tif",
+ "sha256": "3e88e6ad5c63f2bc37edebd0eb2c7332d97ba1e48308f7ffea3b7c63fc2bddd1",
+ "bytes": 628807,
+ "generated_utc": "20260928T195952Z",
+ "grid": {
+  "origin_x": 243350.0,
+  "origin_y": 4508550.0,
+  "pixel_x": 100.0,
+  "pixel_y": 100.0,
+  "epsg": 32611
+ },
+ "bounds": [
+  243350.0,
+  4135550.0,
+  572550.0,
+  4508550.0
+ ],
+ "shape": [
+  3730,
+  3292
+ ],
+ "policy": {
+  "field": "curv_scarp",
+  "area_px": 400000,
+  "nms_radius": 1,
+  "ridge_width": 1,
+  "threshold": 1.2492334917624248e-06,
+  "stage1_holdout_dti": 0.052238,
+  "evidence": "../../../tmp/ho_snapshot.json"
+ },
+ "emitted_px": 362327,
+ "emitted_fraction_of_footprint": 0.07011822061229178,
+ "finite_px": 5167373,
+ "min": 0.0,
+ "max": 1.0,
+ "nan_outside_footprint": true,
+ "suggested_note": "15GEMSDOE clean-up A | curv_scarp ridge | area 4.0e+05 px (7.01% of footprint) | nms 1 width 1 | holdout DTI 0.05224 | 3e88e6ad",
+ "suggested_name": "gems-cleanup-a-20260928T195952Z-curv_scarp.tif"
+}

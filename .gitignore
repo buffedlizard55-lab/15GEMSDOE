@@ -1,0 +1,7 @@
+data/raw/
+data/*.tif
+work/
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/

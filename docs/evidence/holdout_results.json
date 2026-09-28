@@ -1,0 +1,955 @@
+{
+ "generated_utc": "2026-09-28T19:54:17Z",
+ "python": "3.11.2",
+ "protocol": {
+  "withhold_fraction": 0.2,
+  "seed": 20260928,
+  "collar_px": 1,
+  "areas_swept_px": [
+   25000,
+   50000,
+   100000,
+   200000,
+   400000,
+   800000,
+   1500000
+  ],
+  "nms_grid": [
+   0,
+   1,
+   2
+  ],
+  "ridge_width_grid": [
+   1,
+   2,
+   3
+  ],
+  "scoring": "dti(pred, truth=hidden segments, mask=visible catalogue, valid=footprint)",
+  "anti_leakage": "every catalogue-derived feature is computed from the visible catalogue only; the hidden segments never enter a feature",
+  "stage1_rules": [
+   "random"
+  ]
+ },
+ "catalogue": {
+  "n_components": 3199,
+  "n_segments": 3603,
+  "total_segment_pixels": 52074,
+  "label_pixels": 60988,
+  "valid_pixels": 5167373,
+  "raster_shape": [
+   3730,
+   3292
+  ]
+ },
+ "stage1_tuning": {
+  "rule": "random",
+  "truth_pixels": 10164,
+  "mask_pixels": 50564,
+  "collar_dropped_pixels": 260,
+  "leakage_probe_dilate1_dti": 0.026950565747303097,
+  "per_field_best": {
+   "catalogue_proximity": {
+    "nms_radius": 0,
+    "ridge_width": 1,
+    "target_area_px": 400000,
+    "emitted_px": 324185,
+    "dti": 0.034408,
+    "tp_w": 2484.1731,
+    "fp_w": 317849.875,
+    "threshold": 0.348509
+   },
+   "curv_scarp": {
+    "nms_radius": 1,
+    "ridge_width": 1,
+    "target_area_px": 400000,
+    "emitted_px": 359384,
+    "dti": 0.052238,
+    "tp_w": 4199.8018,
+    "fp_w": 357132.125,
+    "threshold": 1e-06
+   },
+   "mag_tilt": {
+    "nms_radius": 1,
+    "ridge_width": 1,
+    "target_area_px": 400000,
+    "emitted_px": 207224,
+    "dti": 0.046971,
+    "tp_w": 2334.8765,
+    "fp_w": 205554.4375,
+    "threshold": 0.000199
+   },
+   "grav_grad": {
+    "nms_radius": 1,
+    "ridge_width": 1,
+    "target_area_px": 200000,
+    "emitted_px": 104833,
+    "dti": 0.015396,
+    "tp_w": 445.5127,
+    "fp_w": 103582.0078,
+    "threshold": 0.002174
+   },
+   "cond_depth": {
+    "nms_radius": 0,
+    "ridge_width": 2,
+    "target_area_px": 200000,
+    "emitted_px": 178145,
+    "dti": 0.014921,
+    "tp_w": 651.47,
+    "fp_w": 176994.5938,
+    "threshold": 0.003184
+   },
+   "seismo_prior": {
+    "nms_radius": 0,
+    "ridge_width": 1,
+    "target_area_px": 200000,
+    "emitted_px": 196964,
+    "dti": 0.020554,
+    "tp_w": 966.1858,
+    "fp_w": 193411.375,
+    "threshold": 0.990959
+   },
+   "strain_ridge": {
+    "nms_radius": 2,
+    "ridge_width": 1,
+    "target_area_px": 200000,
+    "emitted_px": 195875,
+    "dti": 0.017831,
+    "tp_w": 837.6654,
+    "fp_w": 193398.4688,
+    "threshold": 0.620682
+   }
+  },
+  "per_field_top5": {
+   "catalogue_proximity": [
+    {
+     "nms_radius": 0,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 324185,
+     "dti": 0.034408,
+     "tp_w": 2484.1731,
+     "fp_w": 317849.875,
+     "threshold": 0.348509
+    },
+    {
+     "nms_radius": 2,
+     "ridge_width": 3,
+     "target_area_px": 400000,
+     "emitted_px": 290762,
+     "dti": 0.033207,
+     "tp_w": 2179.5454,
+     "fp_w": 285335.8125,
+     "threshold": 0.0
+    },
+    {
+     "nms_radius": 2,
+     "ridge_width": 3,
+     "target_area_px": 800000,
+     "emitted_px": 290762,
+     "dti": 0.033207,
+     "tp_w": 2179.5454,
+     "fp_w": 285335.8125,
+     "threshold": 0.0
+    },
+    {
+     "nms_radius": 2,
+     "ridge_width": 3,
+     "target_area_px": 1500000,
+     "emitted_px": 290762,
+     "dti": 0.033207,
+     "tp_w": 2179.5454,
+     "fp_w": 285335.8125,
+     "threshold": 0.0
+    },
+    {
+     "nms_radius": 0,
+     "ridge_width": 3,
+     "target_area_px": 400000,
+     "emitted_px": 290821,
+     "dti": 0.033201,
+     "tp_w": 2179.5454,
+     "fp_w": 285394.8125,
+     "threshold": 0.0
+    }
+   ],
+   "curv_scarp": [
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 359384,
+     "dti": 0.052238,
+     "tp_w": 4199.8018,
+     "fp_w": 357132.125,
+     "threshold": 1e-06
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 800000,
+     "emitted_px": 359384,
+     "dti": 0.052238,
+     "tp_w": 4199.8018,
+     "fp_w": 357132.125,
+     "threshold": 1e-06
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 1500000,
+     "emitted_px": 359384,
+     "dti": 0.052238,
+     "tp_w": 4199.8018,
+     "fp_w": 357132.125,
+     "threshold": 1e-06
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 200000,
+     "emitted_px": 198611,
+     "dti": 0.043994,
+     "tp_w": 2114.1941,
+     "fp_w": 197513.3594,
+     "threshold": 0.238277
+    },
+    {
+     "nms_radius": 2,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 201241,
+     "dti": 0.042421,
+     "tp_w": 2061.7253,
+     "fp_w": 200287.75,
+     "threshold": 1e-06
+    }
+   ],
+   "mag_tilt": [
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 207224,
+     "dti": 0.046971,
+     "tp_w": 2334.8765,
+     "fp_w": 205554.4375,
+     "threshold": 0.000199
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 800000,
+     "emitted_px": 207224,
+     "dti": 0.046971,
+     "tp_w": 2334.8765,
+     "fp_w": 205554.4375,
+     "threshold": 0.000199
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 1500000,
+     "emitted_px": 207224,
+     "dti": 0.046971,
+     "tp_w": 2334.8765,
+     "fp_w": 205554.4375,
+     "threshold": 0.000199
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 200000,
+     "emitted_px": 197919,
+     "dti": 0.045764,
+     "tp_w": 2188.9985,
+     "fp_w": 196315.7812,
+     "threshold": 0.121371
+    },
+    {
+     "nms_radius": 2,
+     "ridge_width": 1,
+     "target_area_px": 200000,
+     "emitted_px": 170067,
+     "dti": 0.04075,
+     "tp_w": 1720.0793,
+     "fp_w": 168677.375,
+     "threshold": 0.001591
+    }
+   ],
+   "grav_grad": [
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 200000,
+     "emitted_px": 104833,
+     "dti": 0.015396,
+     "tp_w": 445.5127,
+     "fp_w": 103582.0078,
+     "threshold": 0.002174
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 104833,
+     "dti": 0.015396,
+     "tp_w": 445.5127,
+     "fp_w": 103582.0078,
+     "threshold": 0.002174
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 800000,
+     "emitted_px": 104833,
+     "dti": 0.015396,
+     "tp_w": 445.5127,
+     "fp_w": 103582.0078,
+     "threshold": 0.002174
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 1500000,
+     "emitted_px": 104833,
+     "dti": 0.015396,
+     "tp_w": 445.5127,
+     "fp_w": 103582.0078,
+     "threshold": 0.002174
+    },
+    {
+     "nms_radius": 0,
+     "ridge_width": 2,
+     "target_area_px": 200000,
+     "emitted_px": 151426,
+     "dti": 0.015209,
+     "tp_w": 581.0439,
+     "fp_w": 149779.9375,
+     "threshold": 0.002174
+    }
+   ],
+   "cond_depth": [
+    {
+     "nms_radius": 0,
+     "ridge_width": 2,
+     "target_area_px": 200000,
+     "emitted_px": 178145,
+     "dti": 0.014921,
+     "tp_w": 651.47,
+     "fp_w": 176994.5938,
+     "threshold": 0.003184
+    },
+    {
+     "nms_radius": 0,
+     "ridge_width": 2,
+     "target_area_px": 400000,
+     "emitted_px": 178145,
+     "dti": 0.014921,
+     "tp_w": 651.47,
+     "fp_w": 176994.5938,
+     "threshold": 0.003184
+    },
+    {
+     "nms_radius": 0,
+     "ridge_width": 2,
+     "target_area_px": 800000,
+     "emitted_px": 178145,
+     "dti": 0.014921,
+     "tp_w": 651.47,
+     "fp_w": 176994.5938,
+     "threshold": 0.003184
+    },
+    {
+     "nms_radius": 0,
+     "ridge_width": 2,
+     "target_area_px": 1500000,
+     "emitted_px": 178145,
+     "dti": 0.014921,
+     "tp_w": 651.47,
+     "fp_w": 176994.5938,
+     "threshold": 0.003184
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 2,
+     "target_area_px": 200000,
+     "emitted_px": 178145,
+     "dti": 0.014921,
+     "tp_w": 651.47,
+     "fp_w": 176994.5938,
+     "threshold": 0.003184
+    }
+   ],
+   "seismo_prior": [
+    {
+     "nms_radius": 0,
+     "ridge_width": 1,
+     "target_area_px": 200000,
+     "emitted_px": 196964,
+     "dti": 0.020554,
+     "tp_w": 966.1858,
+     "fp_w": 193411.375,
+     "threshold": 0.990959
+    },
+    {
+     "nms_radius": 0,
+     "ridge_width": 3,
+     "target_area_px": 200000,
+     "emitted_px": 196491,
+     "dti": 0.019994,
+     "tp_w": 939.9886,
+     "fp_w": 193471.7188,
+     "threshold": 0.97806
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 3,
+     "target_area_px": 200000,
+     "emitted_px": 196491,
+     "dti": 0.019994,
+     "tp_w": 939.9886,
+     "fp_w": 193471.7188,
+     "threshold": 0.97806
+    },
+    {
+     "nms_radius": 2,
+     "ridge_width": 3,
+     "target_area_px": 200000,
+     "emitted_px": 196519,
+     "dti": 0.019858,
+     "tp_w": 933.769,
+     "fp_w": 193523.375,
+     "threshold": 0.975023
+    },
+    {
+     "nms_radius": 0,
+     "ridge_width": 2,
+     "target_area_px": 200000,
+     "emitted_px": 196870,
+     "dti": 0.019747,
+     "tp_w": 930.4538,
+     "fp_w": 194011.4688,
+     "threshold": 0.969121
+    }
+   ],
+   "strain_ridge": [
+    {
+     "nms_radius": 2,
+     "ridge_width": 1,
+     "target_area_px": 200000,
+     "emitted_px": 195875,
+     "dti": 0.017831,
+     "tp_w": 837.6654,
+     "fp_w": 193398.4688,
+     "threshold": 0.620682
+    },
+    {
+     "nms_radius": 2,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 393626,
+     "dti": 0.017631,
+     "tp_w": 1522.8003,
+     "fp_w": 389672.0625,
+     "threshold": 0.200809
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 393697,
+     "dti": 0.017617,
+     "tp_w": 1521.2944,
+     "fp_w": 389583.125,
+     "threshold": 0.368831
+    },
+    {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 200000,
+     "emitted_px": 195819,
+     "dti": 0.017208,
+     "tp_w": 808.1685,
+     "fp_w": 193354.4688,
+     "threshold": 0.661525
+    },
+    {
+     "nms_radius": 2,
+     "ridge_width": 2,
+     "target_area_px": 400000,
+     "emitted_px": 393468,
+     "dti": 0.017114,
+     "tp_w": 1476.667,
+     "fp_w": 389291.3125,
+     "threshold": 0.487262
+    }
+   ]
+  }
+ },
+ "stage2_verification": {
+  "random": {
+   "truth_pixels": 10164,
+   "mask_pixels": 50564,
+   "leakage_probe_dilate1_dti": 0.026950565747303097,
+   "fields": {
+    "catalogue_proximity": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 8,
+     "dti": 0.0,
+     "tp_w": 0.0,
+     "fp_w": 8.0,
+     "threshold": 0.0
+    },
+    "curv_scarp": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 359384,
+     "dti": 0.052238,
+     "tp_w": 4199.8018,
+     "fp_w": 357132.125,
+     "threshold": 1e-06
+    },
+    "mag_tilt": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 207224,
+     "dti": 0.046971,
+     "tp_w": 2334.8765,
+     "fp_w": 205554.4375,
+     "threshold": 0.000199
+    },
+    "grav_grad": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 104833,
+     "dti": 0.015396,
+     "tp_w": 445.5127,
+     "fp_w": 103582.0078,
+     "threshold": 0.002174
+    },
+    "cond_depth": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 82684,
+     "dti": 0.012677,
+     "tp_w": 312.387,
+     "fp_w": 82243.0469,
+     "threshold": 0.003184
+    },
+    "seismo_prior": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 395698,
+     "dti": 0.01596,
+     "tp_w": 1385.5496,
+     "fp_w": 392026.8125,
+     "threshold": 0.947275
+    },
+    "strain_ridge": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 393697,
+     "dti": 0.017617,
+     "tp_w": 1521.2944,
+     "fp_w": 389583.125,
+     "threshold": 0.368831
+    }
+   },
+   "applied_policy_field": "curv_scarp",
+   "applied_policy_dti": 0.052238
+  },
+  "short": {
+   "truth_pixels": 9622,
+   "mask_pixels": 50572,
+   "leakage_probe_dilate1_dti": 0.04740327298306195,
+   "fields": {
+    "catalogue_proximity": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 8,
+     "dti": 0.0,
+     "tp_w": 0.0,
+     "fp_w": 8.0,
+     "threshold": 0.0
+    },
+    "curv_scarp": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 359333,
+     "dti": 0.048391,
+     "tp_w": 3865.2852,
+     "fp_w": 357023.4688,
+     "threshold": 1e-06
+    },
+    "mag_tilt": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 207103,
+     "dti": 0.041219,
+     "tp_w": 2029.7443,
+     "fp_w": 205694.0625,
+     "threshold": 0.000199
+    },
+    "grav_grad": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 104928,
+     "dti": 0.021408,
+     "tp_w": 609.1205,
+     "fp_w": 103165.0938,
+     "threshold": 0.002174
+    },
+    "cond_depth": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 82761,
+     "dti": 0.016747,
+     "tp_w": 404.842,
+     "fp_w": 81979.0469,
+     "threshold": 0.003184
+    },
+    "seismo_prior": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 395623,
+     "dti": 0.014006,
+     "tp_w": 1209.408,
+     "fp_w": 392048.625,
+     "threshold": 0.947275
+    },
+    "strain_ridge": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 393782,
+     "dti": 0.016621,
+     "tp_w": 1426.6003,
+     "fp_w": 389230.1875,
+     "threshold": 0.368831
+    }
+   },
+   "applied_policy_field": "curv_scarp",
+   "applied_policy_dti": 0.048391
+  },
+  "isolated": {
+   "truth_pixels": 10323,
+   "mask_pixels": 50519,
+   "leakage_probe_dilate1_dti": 0.00675939195075096,
+   "fields": {
+    "catalogue_proximity": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 7,
+     "dti": 0.0,
+     "tp_w": 0.0,
+     "fp_w": 7.0,
+     "threshold": 0.0
+    },
+    "curv_scarp": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 359365,
+     "dti": 0.05233,
+     "tp_w": 4213.4414,
+     "fp_w": 357078.125,
+     "threshold": 1e-06
+    },
+    "mag_tilt": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 207141,
+     "dti": 0.046394,
+     "tp_w": 2312.5557,
+     "fp_w": 205624.625,
+     "threshold": 0.000199
+    },
+    "grav_grad": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 104646,
+     "dti": 0.008978,
+     "tp_w": 261.3437,
+     "fp_w": 103996.4531,
+     "threshold": 0.002174
+    },
+    "cond_depth": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 82692,
+     "dti": 0.012901,
+     "tp_w": 319.4894,
+     "fp_w": 82210.2109,
+     "threshold": 0.003184
+    },
+    "seismo_prior": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 395776,
+     "dti": 0.016919,
+     "tp_w": 1470.5009,
+     "fp_w": 391820.4688,
+     "threshold": 0.947275
+    },
+    "strain_ridge": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 393496,
+     "dti": 0.015849,
+     "tp_w": 1371.4532,
+     "fp_w": 390001.8125,
+     "threshold": 0.368831
+    }
+   },
+   "applied_policy_field": "curv_scarp",
+   "applied_policy_dti": 0.05233
+  },
+  "long": {
+   "truth_pixels": 10365,
+   "mask_pixels": 50552,
+   "leakage_probe_dilate1_dti": 0.00748453435325451,
+   "fields": {
+    "catalogue_proximity": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 8,
+     "dti": 0.0,
+     "tp_w": 0.0,
+     "fp_w": 8.0,
+     "threshold": 0.0
+    },
+    "curv_scarp": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 359444,
+     "dti": 0.054741,
+     "tp_w": 4412.1387,
+     "fp_w": 357130.1875,
+     "threshold": 1e-06
+    },
+    "mag_tilt": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 207320,
+     "dti": 0.049575,
+     "tp_w": 2472.3652,
+     "fp_w": 205425.6094,
+     "threshold": 0.000199
+    },
+    "grav_grad": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 104615,
+     "dti": 0.007998,
+     "tp_w": 233.2136,
+     "fp_w": 104107.1094,
+     "threshold": 0.002174
+    },
+    "cond_depth": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 82677,
+     "dti": 0.011405,
+     "tp_w": 282.9175,
+     "fp_w": 82290.8516,
+     "threshold": 0.003184
+    },
+    "seismo_prior": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 395439,
+     "dti": 0.013212,
+     "tp_w": 1151.0754,
+     "fp_w": 393003.7812,
+     "threshold": 0.947275
+    },
+    "strain_ridge": {
+     "nms_radius": 1,
+     "ridge_width": 1,
+     "target_area_px": 400000,
+     "emitted_px": 393448,
+     "dti": 0.01527,
+     "tp_w": 1322.7013,
+     "fp_w": 390334.4062,
+     "threshold": 0.368831
+    }
+   },
+   "applied_policy_field": "curv_scarp",
+   "applied_policy_dti": 0.054741
+  }
+ },
+ "selected_policy": {
+  "field": "curv_scarp",
+  "target_area_px": 400000,
+  "nms_radius": 1,
+  "ridge_width": 1,
+  "threshold": 1e-06,
+  "stage1_dti": 0.052238
+ },
+ "fragility": {
+  "catalogue_proximity": {
+   "per_rule_dti": {
+    "random": 0.0,
+    "short": 0.0,
+    "isolated": 0.0,
+    "long": 0.0
+   },
+   "rules_won": 0,
+   "fragile": true
+  },
+  "curv_scarp": {
+   "per_rule_dti": {
+    "random": 0.052238,
+    "short": 0.048391,
+    "isolated": 0.05233,
+    "long": 0.054741
+   },
+   "rules_won": 4,
+   "fragile": false
+  },
+  "mag_tilt": {
+   "per_rule_dti": {
+    "random": 0.046971,
+    "short": 0.041219,
+    "isolated": 0.046394,
+    "long": 0.049575
+   },
+   "rules_won": 0,
+   "fragile": true
+  },
+  "grav_grad": {
+   "per_rule_dti": {
+    "random": 0.015396,
+    "short": 0.021408,
+    "isolated": 0.008978,
+    "long": 0.007998
+   },
+   "rules_won": 0,
+   "fragile": true
+  },
+  "cond_depth": {
+   "per_rule_dti": {
+    "random": 0.012677,
+    "short": 0.016747,
+    "isolated": 0.012901,
+    "long": 0.011405
+   },
+   "rules_won": 0,
+   "fragile": true
+  },
+  "seismo_prior": {
+   "per_rule_dti": {
+    "random": 0.01596,
+    "short": 0.014006,
+    "isolated": 0.016919,
+    "long": 0.013212
+   },
+   "rules_won": 0,
+   "fragile": true
+  },
+  "strain_ridge": {
+   "per_rule_dti": {
+    "random": 0.017617,
+    "short": 0.016621,
+    "isolated": 0.015849,
+    "long": 0.01527
+   },
+   "rules_won": 0,
+   "fragile": true
+  }
+ },
+ "runtime_seconds": 141.3,
+ "baseline_retuned_per_rule": {
+  "random": {
+   "tuned_baseline_dti": 0.034408,
+   "area": 400000,
+   "nms": 0,
+   "emitted": 376278
+  },
+  "short": {
+   "tuned_baseline_dti": 0.054963,
+   "area": 400000,
+   "nms": 0,
+   "emitted": 377769
+  },
+  "isolated": {
+   "tuned_baseline_dti": 0.013122,
+   "area": 800000,
+   "nms": 0,
+   "emitted": 806533
+  },
+  "long": {
+   "tuned_baseline_dti": 0.016023,
+   "area": 800000,
+   "nms": 0,
+   "emitted": 806361
+  }
+ },
+ "fair_baseline_comparison": {
+  "random": {
+   "baseline_tuned_dti": 0.034408,
+   "curv_scarp_frozen_policy_dti": 0.052238,
+   "curv_scarp_margin_over_tuned_baseline": 0.01783,
+   "mag_tilt_frozen_policy_dti": 0.046971,
+   "mag_tilt_margin_over_tuned_baseline": 0.012563
+  },
+  "short": {
+   "baseline_tuned_dti": 0.054963,
+   "curv_scarp_frozen_policy_dti": 0.048391,
+   "curv_scarp_margin_over_tuned_baseline": -0.006572,
+   "mag_tilt_frozen_policy_dti": 0.041219,
+   "mag_tilt_margin_over_tuned_baseline": -0.013744
+  },
+  "isolated": {
+   "baseline_tuned_dti": 0.013122,
+   "curv_scarp_frozen_policy_dti": 0.05233,
+   "curv_scarp_margin_over_tuned_baseline": 0.039208,
+   "mag_tilt_frozen_policy_dti": 0.046394,
+   "mag_tilt_margin_over_tuned_baseline": 0.033272
+  },
+  "long": {
+   "baseline_tuned_dti": 0.016023,
+   "curv_scarp_frozen_policy_dti": 0.054741,
+   "curv_scarp_margin_over_tuned_baseline": 0.038718,
+   "mag_tilt_frozen_policy_dti": 0.049575,
+   "mag_tilt_margin_over_tuned_baseline": 0.033552
+  }
+ },
+ "fragility_vs_tuned_baseline": {
+  "curv_scarp": {
+   "rules_beaten": 3,
+   "of": 4,
+   "loses_under": [
+    "short"
+   ],
+   "note": "curv_scarp is evaluated at the single policy frozen from stage 1, while the baseline is re-tuned per rule, so this comparison is conservative against curv_scarp. It still loses under the 'short' rule, and that rule is the one with the highest dilate-1 leakage (0.0474), i.e. the ranking there is the least trustworthy. Reported rather than explained away."
+  },
+  "methodological_caveat": "Stage 2 applies one frozen operating point per field; an earlier attempt to re-tune every field under every rule did not complete inside this session's compute budget (2 CPUs, ~3 GB RAM). The per-rule baseline above was re-tuned separately so the comparison is not an artefact of the frozen grid."
+ }
+}
