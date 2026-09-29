@@ -1,0 +1,78 @@
+{
+ "file": "docs/downloads/gems-v1_conj_mag_asa_edge-20260929T054519Z-conj_mag_asa_edge.tif",
+ "sha256": "f3f4302cb639f374221f9b2a4a75b784d036327078cadd85bfbb28ffb058a6d7",
+ "bytes": 314425,
+ "generated_utc": "20260929T054519Z",
+ "grid": {
+  "origin_x": 243350.0,
+  "origin_y": 4508550.0,
+  "pixel_x": 100.0,
+  "pixel_y": 100.0,
+  "epsg": 32611
+ },
+ "shape": [
+  3730,
+  3292
+ ],
+ "field": "conj_mag_asa_edge",
+ "parts": [
+  "mag_asa_edge",
+  "mag_tilt"
+ ],
+ "area_px": 100000,
+ "nms_radius": 1,
+ "threshold": 0.12632279098033905,
+ "emitted_px": 99999,
+ "chargeable_px": 90938,
+ "chargeable_share_of_emitted": 0.909389078617096,
+ "finite_px": 5167373,
+ "bounds": [
+  243350.0,
+  4135550.0,
+  572550.0,
+  4508550.0
+ ],
+ "min": 0.0,
+ "max": 1.0,
+ "emitted_fraction_of_footprint": 0.019351999555673648,
+ "evidence": "docs/evidence/holdout_new_fields_collar3.json",
+ "new_information": "GeoDAWN contractor Th/K and U/K ratio grids (DOI 10.5066/P93LGLVQ, USGS public domain); no earlier group submission used the ratios or a multi-sensor conjunction",
+ "contract_ok": true,
+ "contract_checks": {
+  "R1_crs_epsg32611": true,
+  "R2_resolution_100m": true,
+  "R4a_single_band": true,
+  "R4b_float32": true,
+  "R3a_bounds_match_reference": true,
+  "R3b_shape_match_reference": true,
+  "R3c_crs_match_reference": true,
+  "R3d_transform_match_reference": true,
+  "R3e_nan_outside_footprint": true,
+  "R4c_values_in_unit_interval": true,
+  "R4d_no_negative": true,
+  "R4e_not_empty": true
+ },
+ "novelty_gate_ok": true,
+ "chargeable_jaccard_max_vs_priors": 0.01594449535279487,
+ "novelty_closest_priors": [
+  {
+   "prior": "15GEMSDOE:docs/downloads/gems-cleanup-a-20260928T195952Z-curv_scarp.tif",
+   "array_identity": false,
+   "spearman_rho": -0.0027065020812284324,
+   "topk": {
+    "top10000": 0.0
+   },
+   "chargeable": {
+    "candidate_px": 90938,
+    "prior_px": 335906,
+    "intersection_px": 6699,
+    "jaccard": 0.01594449535279487,
+    "identical": false
+   },
+   "near_duplicate": false
+  }
+ ],
+ "novelty_duplicates": [],
+ "suggested_name": "gems-v1_conj_mag_asa_edge-20260929T054519Z-conj_mag_asa_edge.tif",
+ "suggested_note": "15GEMSDOE TSO-1: conjunction of GeoDAWN contractor Th/K and U/K radiometric alteration with the magnetic tilt-angle edge; 100k px, nms 1. Holdout DTI 0.05302 vs 0.04015 for the previous best, 4/4 withholding rules. Uses public-domain GeoDAWN data (USGS data release DOI 10.5066/P93LGLVQ, CC0). Known artefact: the thin emitted lines carry a 2-row survey-fabric periodicity, measured and published in the repository. SHA-256 f3f4302c"
+}

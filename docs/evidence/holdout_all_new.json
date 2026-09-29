@@ -1,0 +1,273 @@
+{
+ "generated_utc": "2026-09-29T05:39:15Z",
+ "python": "3.11.2",
+ "protocol": {
+  "withhold_fraction": 0.2,
+  "seed": 0,
+  "collar_px": 3,
+  "stage1_areas_px": [
+   50000,
+   100000,
+   200000,
+   400000,
+   800000
+  ],
+  "scoring": "dti(pred, truth=hidden segments, mask=visible catalogue, valid=footprint)",
+  "promotion_rule": "beat the incumbent best on stage 1 and on >=3 of the 4 stage-2 rules, leakage probe < 0.02 everywhere",
+  "new_information": {
+   "rad_alteration": "GeoDAWN contractor ratio grids Th/K and U/K (K enrichment plus U mobilisation)",
+   "rad_uth_anomaly": "GeoDAWN contractor U/Th ratio grid",
+   "tmi150_edge": "edge magnitude of the upward-continued TMI (150 m)",
+   "rad_k_edge": "edge magnitude of the potassium channel",
+   "conj_*": "geometric-mean conjunction (>=2 independent sensor families must agree)"
+  }
+ },
+ "catalogue": {
+  "n_components": 3199,
+  "n_segments": 3603,
+  "label_pixels": 60988,
+  "valid_pixels": 5167373
+ },
+ "stage1": {
+  "catalogue_proximity": {
+   "nms_radius": 0,
+   "ridge_width": 1,
+   "target_area_px": 800000,
+   "emitted_px": 733980,
+   "dti": 0.019364,
+   "tp_w": 2932.4622,
+   "fp_w": 723937.875,
+   "threshold": 0.106878
+  },
+  "cond_depth": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 100000,
+   "emitted_px": 82739,
+   "dti": 0.011843,
+   "tp_w": 267.0969,
+   "fp_w": 82176.9922,
+   "threshold": 0.003184
+  },
+  "conj_grav_tc_edge": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 50000,
+   "emitted_px": 29284,
+   "dti": 0.016785,
+   "tp_w": 200.2701,
+   "fp_w": 29137.8203,
+   "threshold": 1e-06
+  },
+  "conj_mag_asa_edge": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 100000,
+   "emitted_px": 98985,
+   "dti": 0.052539,
+   "tp_w": 1366.5533,
+   "fp_w": 98364.1719,
+   "threshold": 0.126243
+  },
+  "conj_mag_gravity": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 100000,
+   "emitted_px": 98871,
+   "dti": 0.052445,
+   "tp_w": 1363.1239,
+   "fp_w": 98273.7188,
+   "threshold": 0.001
+  },
+  "curv_multiscale_max": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 400000,
+   "emitted_px": 216124,
+   "dti": 0.010401,
+   "tp_w": 512.7905,
+   "fp_w": 215673.5781,
+   "threshold": 5e-06
+  },
+  "curv_multiscale_prod": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 100000,
+   "emitted_px": 80358,
+   "dti": 0.032248,
+   "tp_w": 716.3635,
+   "fp_w": 80034.8828,
+   "threshold": 0.0
+  },
+  "curv_multiscale_sum": {
+   "dti": 0.0
+  },
+  "curv_scarp": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 400000,
+   "emitted_px": 359395,
+   "dti": 0.04014,
+   "tp_w": 3139.9312,
+   "fp_w": 357663.6562,
+   "threshold": 1e-06
+  },
+  "grav_grad": {
+   "nms_radius": 0,
+   "ridge_width": 1,
+   "target_area_px": 800000,
+   "emitted_px": 790805,
+   "dti": 0.011167,
+   "tp_w": 1823.9761,
+   "fp_w": 784532.0,
+   "threshold": 0.524078
+  },
+  "grav_tc_edge": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 200000,
+   "emitted_px": 113852,
+   "dti": 0.018274,
+   "tp_w": 524.3065,
+   "fp_w": 112611.9531,
+   "threshold": 0.000304
+  },
+  "mag_asa": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 200000,
+   "emitted_px": 138803,
+   "dti": 0.026019,
+   "tp_w": 878.8671,
+   "fp_w": 137690.75,
+   "threshold": 2e-06
+  },
+  "mag_asa_edge": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 200000,
+   "emitted_px": 182943,
+   "dti": 0.036674,
+   "tp_w": 1566.4622,
+   "fp_w": 181680.1562,
+   "threshold": 3e-06
+  },
+  "mag_tilt": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 400000,
+   "emitted_px": 207226,
+   "dti": 0.036737,
+   "tp_w": 1748.5752,
+   "fp_w": 205918.875,
+   "threshold": 0.000199
+  },
+  "seismo_prior": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 800000,
+   "emitted_px": 584287,
+   "dti": 0.011041,
+   "tp_w": 1352.7144,
+   "fp_w": 580899.0,
+   "threshold": 8.1e-05
+  },
+  "strain_ridge": {
+   "nms_radius": 1,
+   "ridge_width": 1,
+   "target_area_px": 400000,
+   "emitted_px": 393810,
+   "dti": 0.013539,
+   "tp_w": 1142.9432,
+   "fp_w": 390631.6562,
+   "threshold": 0.368831
+  },
+  "_leakage_probe_dilate1_dti": 0.0
+ },
+ "stage2": {
+  "incumbent": {
+   "random": {
+    "field": "curv_scarp",
+    "dti": 0.04014,
+    "emitted_px": 359395,
+    "target_area_px": 400000,
+    "truth_pixels": 7580,
+    "leakage_probe_dilate1_dti": 0.0
+   },
+   "short": {
+    "field": "curv_scarp",
+    "dti": 0.030821,
+    "emitted_px": 359333,
+    "target_area_px": 400000,
+    "truth_pixels": 5815,
+    "leakage_probe_dilate1_dti": 0.0
+   },
+   "isolated": {
+    "field": "curv_scarp",
+    "dti": 0.049804,
+    "emitted_px": 359331,
+    "target_area_px": 400000,
+    "truth_pixels": 9762,
+    "leakage_probe_dilate1_dti": 0.0
+   },
+   "long": {
+    "field": "curv_scarp",
+    "dti": 0.055873,
+    "emitted_px": 198739,
+    "target_area_px": 200000,
+    "truth_pixels": 9618,
+    "leakage_probe_dilate1_dti": 0.0
+   }
+  },
+  "new": {
+   "random": {
+    "field": "conj_mag_asa_edge",
+    "dti": 0.052532,
+    "emitted_px": 98985,
+    "target_area_px": 100000,
+    "truth_pixels": 7580,
+    "leakage_probe_dilate1_dti": 0.0
+   },
+   "short": {
+    "field": "conj_mag_asa_edge",
+    "dti": 0.04107,
+    "emitted_px": 140595,
+    "target_area_px": 200000,
+    "truth_pixels": 5815,
+    "leakage_probe_dilate1_dti": 0.0
+   },
+   "isolated": {
+    "field": "conj_mag_asa_edge",
+    "dti": 0.063467,
+    "emitted_px": 140598,
+    "target_area_px": 200000,
+    "truth_pixels": 9762,
+    "leakage_probe_dilate1_dti": 0.0
+   },
+   "long": {
+    "field": "conj_mag_asa_edge",
+    "dti": 0.061628,
+    "emitted_px": 140559,
+    "target_area_px": 200000,
+    "truth_pixels": 9618,
+    "leakage_probe_dilate1_dti": 0.0
+   }
+  }
+ },
+ "stage1_summary": {
+  "incumbent_best_field": "curv_scarp",
+  "incumbent_best_dti": 0.04014,
+  "new_best_field": "conj_mag_asa_edge",
+  "new_best_dti": 0.052539,
+  "reference_control_catalogue_proximity_dti": 0.019364
+ },
+ "verdict": {
+  "new_field": "conj_mag_asa_edge",
+  "incumbent_field": "curv_scarp",
+  "rules_won_by_new": 4,
+  "rules_tested": 4,
+  "leakage_ok": true,
+  "promoted": true,
+  "reason": "new-information field beat the incumbent on stage 1 and on 4/4 stage-2 rules with the leakage probe below 0.02"
+ }
+}

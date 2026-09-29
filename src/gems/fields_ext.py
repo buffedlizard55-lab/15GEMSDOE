@@ -101,6 +101,37 @@ def build_aux_fields(aux_dir: str, valid: np.ndarray, sigma: float = 1.0,
             return _nan_safe_z(g, valid)
         cached("rad_k_edge", rad_k_edge)
 
+    # ---- NEW: Radiometric ratio edges (Hypothesis 3) ---------------------
+    # Compute additional ratios from raw channels
+    if {"K", "Th", "U", "TC"} <= set(rad):
+        # K/Th ratio edge - potassium enrichment
+        def rad_k_th_ratio_edge():
+            ratio = np.nan_to_num(rad["K"] / rad["Th"])
+            g = _grad_mag(_gauss(ratio, sigma))
+            return _nan_safe_z(g, valid)
+        cached("rad_k_th_edge", rad_k_th_ratio_edge)
+
+        # U/Th ratio edge - uranium relative to thorium
+        def rad_u_th_ratio_edge():
+            ratio = np.nan_to_num(rad["U"] / rad["Th"])
+            g = _grad_mag(_gauss(ratio, sigma))
+            return _nan_safe_z(g, valid)
+        cached("rad_u_th_edge", rad_u_th_ratio_edge)
+
+        # U/K ratio edge - uranium relative to potassium
+        def rad_u_k_ratio_edge():
+            ratio = np.nan_to_num(rad["U"] / rad["K"])
+            g = _grad_mag(_gauss(ratio, sigma))
+            return _nan_safe_z(g, valid)
+        cached("rad_u_k_edge", rad_u_k_ratio_edge)
+
+        # (K+U+Th)/TC ratio edge - radiometric closure
+        def rad_closure_ratio_edge():
+            ratio = np.nan_to_num((rad["K"] + rad["U"] + rad["Th"]) / rad["TC"])
+            g = _grad_mag(_gauss(ratio, sigma))
+            return _nan_safe_z(g, valid)
+        cached("rad_closure_edge", rad_closure_ratio_edge)
+
     for k in out:
         out[k] = np.where(valid, out[k], 0.0).astype(np.float32)
     return out
@@ -133,4 +164,18 @@ CONJUNCTIONS = {
     "conj_alteration_mag": ("rad_alteration", "mag_tilt"),
     # alteration + gravity edge: fluids follow density boundaries
     "conj_alteration_gravity": ("rad_alteration", "grav_grad"),
+    # NEW: Radiometric ratio edge conjunctions (Hypothesis 3)
+    # K/Th edge + magnetic edge
+    "conj_rad_k_th_mag": ("rad_k_th_edge", "mag_tilt"),
+    # U/Th edge + magnetic edge
+    "conj_rad_u_th_mag": ("rad_u_th_edge", "mag_tilt"),
+    # U/K edge + magnetic edge
+    "conj_rad_u_k_mag": ("rad_u_k_edge", "mag_tilt"),
+    # Closure ratio edge + magnetic edge
+    "conj_rad_closure_mag": ("rad_closure_edge", "mag_tilt"),
+    # Multi-ratio conjunction: K/Th + U/Th + magnetic
+    "conj_rad_multi_ratio_mag": ("rad_k_th_edge", "rad_u_th_edge", "mag_tilt"),
+    # NEW: Magnetic ASA conjunctions (Hypothesis 6)
+    "conj_mag_asa_edge": ("mag_asa_edge", "mag_tilt"),
+    "conj_grav_tc_edge": ("grav_tc_edge", "grav_grad"),
 }
