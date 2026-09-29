@@ -69,7 +69,8 @@ BANDS = {
 }
 
 FIELDS = ("catalogue_proximity", "curv_scarp", "mag_tilt", "grav_grad",
-          "cond_depth", "seismo_prior", "strain_ridge")
+          "cond_depth", "seismo_prior", "strain_ridge",
+          "curv_multiscale_sum", "curv_multiscale_max", "curv_multiscale_prod")
 
 
 def _gauss(a: np.ndarray, sigma: float) -> np.ndarray:
@@ -86,6 +87,48 @@ def _grad_mag(a: np.ndarray) -> np.ndarray:
 
 def _laplacian(a: np.ndarray) -> np.ndarray:
     return ndimage.laplace(a, mode="nearest")
+
+
+def _multi_scale_curvature(det_elev: np.ndarray, valid: np.ndarray,
+                           sigma: float = 1.0) -> Dict[str, np.ndarray]:
+    """Compute curvature at multiple scales and stack.
+    
+    Hypothesis H5: Multi-Scale Curvature Stack
+    - Faults express at multiple scales
+    - Small faults: 300m scale optimal
+    - Large fault zones: 600m-1200m scales optimal
+    - Multi-scale stack captures faults of all sizes
+    
+    Returns dict with three stacking methods: sum, max, product.
+    """
+    scales = [3, 6, 9, 12]  # pixels (300m, 600m, 900m, 1200m)
+    curvatures = []
+    
+    for scale in scales:
+        # Gaussian smoothing at scale * 100m
+        smoothed = _gauss(det_elev, sigma * scale)
+        # Laplacian for curvature
+        curv = np.abs(_laplacian(smoothed))
+        # Normalize to [0, 1]
+        curv = _nan_safe_z(curv, valid)
+        curvatures.append(curv)
+    
+    # Stacking method 1: Sum (amplifies consistent signals)
+    curv_sum = np.clip(np.sum(curvatures, axis=0), 0, 1)
+    
+    # Stacking method 2: Max (preserves sharpest features)
+    curv_max = np.max(curvatures, axis=0)
+    
+    # Stacking method 3: Product (AND logic - requires all scales)
+    prod = np.ones_like(curvatures[0], dtype=np.float64)
+    for c in curvatures:
+        prod *= np.maximum(c, 1e-6)
+    
+    return {
+        "curv_multiscale_sum": curv_sum.astype(np.float32),
+        "curv_multiscale_max": curv_max.astype(np.float32),
+        "curv_multiscale_prod": prod.astype(np.float32),
+    }
 
 
 def _nan_safe_z(a: np.ndarray, valid: np.ndarray) -> np.ndarray:
@@ -184,6 +227,41 @@ def build_fields(features_path: str, visible: np.ndarray, valid: np.ndarray,
             return _nan_safe_z(np.hypot(inv2, shr), valid)
         cached("strain_ridge", g6)
 
+        # ---- H6: Magnetic Analytic Signal Amplitude ------------------------
+        def mag_asa():
+            """Analytic Signal Amplitude from magnetic derivatives.
+            ASA = sqrt(tmi_vg^2 + tmi_hg^2)
+            Enhances edges regardless of magnetization direction.
+            """
+            tmi_vg = _gauss(np.nan_to_num(read_band(src, "tmi_vg", valid)), sigma)
+            tmi_hg = _gauss(np.nan_to_num(read_band(src, "tmi_hg", valid)), sigma)
+            asa = np.sqrt(tmi_vg**2 + tmi_hg**2)
+            return _nan_safe_z(asa, valid)
+        cached("mag_asa", mag_asa)
+
+        def mag_asa_edge():
+            """Edge of Analytic Signal Amplitude."""
+            asa = _gauss(np.nan_to_num(read_band(src, "mag_asa", valid)), 0)
+            # Actually, mag_asa is computed, not a band
+            # Need to get it from the cached dict
+            g = _grad_mag(_gauss(np.nan_to_num(out.get("mag_asa", np.zeros_like(valid))), sigma))
+            return _nan_safe_z(g, valid)
+        # Don't cache this separately, compute it differently
+
+        # ---- H7: Gravity Terrain-Corrected Edge -----------------------------
+        # Simple terrain correction: use gravity gradient which is less affected by terrain
+        def grav_tc_edge():
+            """Terrain-corrected gravity edge approximation.
+            Uses iso_grav_anom_hg which is less affected by terrain.
+            """
+            grav_hg = _gauss(np.nan_to_num(read_band(src, "iso_grav_anom_hg", valid)), sigma)
+            return _nan_safe_z(_grad_mag(grav_hg), valid)
+        cached("grav_tc_edge", grav_tc_edge)
+
+    # ---- H5: Multi-Scale Curvature (outside with block) ---------------------
+    # This needs to be computed after the with block closes
+    # We'll add it after the with block
+
     # ---- reference arm: proximity to the VISIBLE catalogue only -----------
     def g7():
         from .catalogue import visible_catalogue_distance
@@ -193,4 +271,19 @@ def build_fields(features_path: str, visible: np.ndarray, valid: np.ndarray,
 
     for k in out:
         out[k] = np.where(valid, out[k], 0.0).astype(np.float32)
+    
+    # ---- H5: Multi-Scale Curvature (compute after with block) ---------------
+    # Read det_elev outside the with block
+    with rasterio.open(features_path) as src2:
+        e = read_band(src2, "det_elev", valid)
+    ms = _multi_scale_curvature(e, valid, sigma)
+    for k, v in ms.items():
+        out[k] = np.where(valid, v, 0.0).astype(np.float32)
+    
+    # ---- H6: Magnetic ASA Edge (compute after mag_asa is available) ---------
+    if "mag_asa" in out:
+        asa = out["mag_asa"]
+        asa_edge = _grad_mag(_gauss(asa, sigma))
+        out["mag_asa_edge"] = np.where(valid, _nan_safe_z(asa_edge, valid), 0.0).astype(np.float32)
+    
     return out

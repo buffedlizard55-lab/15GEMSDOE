@@ -46,9 +46,13 @@ _spec = importlib.util.spec_from_file_location("run_holdout", os.path.join(HERE,
 RH = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(RH)                   # type: ignore[union-attr]
 
-NEW_FIELDS = ("rad_alteration", "rad_uth_anomaly", "tmi150_edge", "rad_k_edge",
-              "conj_mag_gravity", "conj_three_edges", "conj_alteration_mag",
-              "conj_alteration_gravity")
+NEW_FIELDS = ("conj_mag_gravity",
+              # NEW: Multi-scale curvature (Hypothesis 5)
+              "curv_multiscale_sum", "curv_multiscale_max", "curv_multiscale_prod",
+              # NEW: Magnetic ASA (Hypothesis 6)
+              "mag_asa", "mag_asa_edge", "conj_mag_asa_edge",
+              # NEW: Gravity terrain correction (Hypothesis 7)
+              "grav_tc_edge", "conj_grav_tc_edge")
 STAGE1_AREAS = (50_000, 100_000, 200_000, 400_000, 800_000)
 RULES = ("random", "short", "isolated", "long")
 
