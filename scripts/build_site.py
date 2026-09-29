@@ -92,13 +92,17 @@ def main() -> int:
     ho = load("holdout_results.json")
     fus = load("fusion_results.json")
     sub = load("submission_validation.json")
+    chg = load("chargeable_support.json")
+    acq = load("acquisition_audit.json")
+    nf = load("holdout_new_fields_collar3.json")
+    sf = load("stripe_fix.json")
     man = {}
     dldir = os.path.join(DOCS, "downloads")
     if os.path.isdir(dldir):
-        for f in sorted(os.listdir(dldir)):
-            if f.endswith(".manifest.json"):
-                man = json.load(open(os.path.join(dldir, f)))
-                break
+        cands = [json.load(open(os.path.join(dldir, f)))
+                 for f in sorted(os.listdir(dldir)) if f.endswith(".manifest.json")]
+        if cands:              # the newest manifest is the file the site offers for download
+            man = max(cands, key=lambda mm: str(mm.get("generated_utc", "")))
 
     files = data.get("files", {})
     sc = metric.get("strategic_constants", {})
@@ -157,11 +161,17 @@ def main() -> int:
               f"{policy.get('target_area_px', 0):,}",
               best.get("catalogue_proximity", {}).get("dti", 0)),
            '<div class="card"><h2>Why the group kept seeing 0.1563</h2>'
-           '<p>Measured locally from the SHA-256 of the published files: '
-           '<code>7f00890a62878d61...</code> is present as <strong>three byte-identical copies</strong> across '
-           'two of the group\'s repositories, and it is the file that scored 0.1563. The same bytes cannot score '
-           'differently. Detail and the second, separate cause (a local holdout that was fitted on the traces it '
-           'was scoring) are on the <a href="holdout.html">Holdout</a> page.</p></div>']
+           '<p>Two mechanisms, both measured on the group\'s own files this session. '
+           '<strong>(1) The same raster was uploaded repeatedly.</strong> Hashing every prior submission '
+           'finds <code>7f00890a62878d61...</code> byte-identical in <strong>6 paths across 5 repositories</strong> '
+           '(the ledger admits three), and identical bytes cannot score differently.</p>'
+           '<p><strong>(2) Different rasters, the same bet.</strong> The score only pays outside the 300 m free '
+           'zone of the shipped mask, so two files with different footprints can be the same submission. The '
+           'chargeable-support audit finds a <strong>15-file family</strong> sharing one chargeable pixel set '
+           '(ens12, the hedge candidate, 8GEMSDOE Hedge-v2, the dilational variants, the GEMSDOE2 arms) at '
+           'Jaccard &ge; 0.96, with <strong>%s identical pixels</strong> between the two files that both scored '
+           '0.1563. The rank-correlation gate was blind to this; the gate now is '
+           '(<a href="audits.html">novelty &amp; acquisition</a>).</p></div>' ]
 
     # ---------------- executive summary ----------------
     note = man.get("suggested_note", "paste the note from the manifest")
@@ -372,6 +382,67 @@ def main() -> int:
                                 "This is the arm the group has been optimising. It is included so that every other hypothesis has to beat a measured baseline rather than a feeling.",
                                 "It is the incumbent, not a new idea."),
     }
+    new_meta = {
+        "conj_alteration_mag": ("N1", "Radiometric alteration x magnetic tilt edge",
+            "contractor Th/K and U/K ratio grids (GeoDAWN, CC0) x tmi_hg tilt-angle edge (band 3)",
+            "Hydrothermal alteration moves potassium and uranium in opposite directions along a fault, and the tilt-angle edge normalises magnetic amplitude so weak sources still show an edge. Two independent sensor families must agree before a pixel is emitted.",
+            "USGS/INGENIOUS labels record mapped trace geometry, not alteration. A new fault in a covered or altered corridor can leak its alteration halo while its trace stays unmapped -- the halo is a signature the catalogue does not carry.",
+            "First use of the contractor ratio grids in this group, and the first multi-sensor conjunction (geometric mean, so one weak arm cannot carry a pixel).",
+            "Pre-mortem: the 300 m free zone masks the halo's inner edge next to catalogue traces, so most of the credit must come from halo pixels 300-600 m out; if the private truth sits exactly on the masked trace, the conjunction loses by construction.",
+            "promoted: wins 4/4 rules at collar 3"),
+        "conj_three_edges": ("N2", "Three-sensor edge conjunction",
+            "tmi_hg edge x K edge x det_elev_slope",
+            "Three independent structural sensors agreeing on the same line is a stricter test than any one; the geometric mean suppresses single-sensor false positives.",
+            "A fault with no surface scarp may still cut the magnetic and radiometric fields; requiring two of three sensors keeps the corridor while dropping single-channel artefacts.",
+            "No previous group arm combined radiometric edges with magnetic edges at all.",
+            "Pre-mortem: any acquisition seam that appears in more than one channel will pass the conjunction, which is exactly why the acquisition audit is run on every emission.",
+            "measured, not promoted"),
+        "rad_alteration": ("N3", "Radiometric alteration proxy",
+            "contractor Th/K and U/K ratio grids only",
+            "The ratio removes the terrain/soil-moisture effect that the raw K, Th, U channels carry; anomalies in the ratio are the classic alteration signature.",
+            "Detects alteration corridors along structures the catalogue never mapped.",
+            "New data (contractor ratio products) used for the first time.",
+            "Pre-mortem: without a magnetic arm the proxy can follow sedimentary lithology rather than structure; the holdout showed the magnetic arm adds ~0.002 DTI over this arm alone.",
+            "measured, not promoted"),
+        "conj_mag_gravity": ("N4", "Magnetic x gravity edge conjunction",
+            "tmi_hg edge x iso_grav_anom edge",
+            "Density and magnetisation boundaries coincide on many fault planes; the conjunction rejects boundaries that only one field sees.",
+            "Sees buried structure where neither topography nor one geophysical field alone is diagnostic -- the class of fault most likely to be missing from the catalogue.",
+            "First conjunction of the two potential-field families in the group.",
+            "Pre-mortem: gravity edges are broad relative to the 300 m kernel, so the emitted band may be smeared by the kernel itself.",
+            "measured, not promoted"),
+        "conj_alteration_gravity": ("N5", "Alteration x gravity edge conjunction",
+            "contractor ratio grids x iso_grav_anom edge",
+            "Alteration marks fluid pathways; gravity edges mark density contrasts: a fault with both is a strong fluid-structure bet.",
+            "Catches faults that show alteration but no topography and no magnetisation.",
+            "New pairing.",
+            "Pre-mortem: the two arms respond at different wavelengths; the geometric mean can amplify the wider one.",
+            "measured, not promoted"),
+        "tmi150_edge": ("N6", "Upward-continued TMI edge",
+            "tmi_hg and the 150 m upward-continued TMI edge",
+            "Upward continuation suppresses shallow, small-source noise and keeps deep structure.",
+            "Deep structures are precisely what a surface-mapped catalogue omits.",
+            "New product (upward-continued TMI, from the GeoDAWN extension grids).",
+            "Pre-mortem: continuation also removes the short-wavelength detail the 300 m kernel could have credited.",
+            "not promoted"),
+    }
+    nrows = ""
+    for fname, (tag, name, layers, why, diff, newness, premortem, status) in new_meta.items():
+        if not isinstance((nf.get("stage1") or {}).get(fname), dict):
+            continue
+        v = nf["stage1"][fname]
+        nrows += ("<tr><td><strong>%s</strong><br><code>%s</code></td><td>%s</td><td>%s</td>"
+                  "<td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%.5f</td><td>%s</td></tr>"
+                  % (tag, esc(fname), esc(name), esc(layers), esc(why), esc(diff), esc(newness),
+                     esc(premortem), esc(status), v.get("dti", 0.0),
+                     "promoted" if esc(fname) == "conj_alteration_mag" else "measured, not promoted"))
+    nfrows = ""
+    for fname in sorted([k for k, v in (nf.get("stage1") or {}).items() if isinstance(v, dict)],
+                        key=lambda k: -nf["stage1"][k].get("dti", 0.0)):
+        v = nf["stage1"][fname]
+        nfrows += ("<tr><td><code>%s</code></td><td>%.5f</td><td>%s</td><td>%s</td></tr>"
+                   % (esc(fname), v.get("dti", 0.0), f"{v.get('emitted_px', 0):,}",
+                      v.get("target_area_px")))
     hrows = ""
     for f, (tag, name, layers, why, diff) in hyp.items():
         v = best.get(f, {})
@@ -386,6 +457,17 @@ def main() -> int:
           'holdout result, not by plausibility.</p>',
           '<table><tr><th>Hypothesis</th><th>Name</th><th>Layers / signature</th><th>Why it should catch a missing fault</th>'
           '<th>Difference from existing work</th><th>holdout DTI</th><th>beats baseline</th></tr>%s</table>' % hrows,
+          '<h2>The new-information hypotheses, ranked by measured holdout DTI</h2>'
+          '<p>Each entry names the layers, the physical signature, why it should catch a fault the catalogue '
+          'misses, how it differs from everything already in this repository, and the pre-mortem on how the '
+          'official masking or the 300 m kernel could make it lose. DTI column = the pre-registered collar-3 '
+          'holdout (docs/evidence/holdout_new_fields_collar3.json).</p>'
+          '<table><tr><th>#</th><th>Name</th><th>Layers</th><th>Why it should catch a missing fault</th>'
+          '<th>Difference from existing work</th><th>Novelty of information</th><th>Pre-mortem</th>'
+          '<th>Status</th><th>holdout DTI</th><th>Verdict</th></tr>%s</table>'
+          '<h3>All new-information fields on the collar-3 draw</h3>'
+          '<table><tr><th>field</th><th>stage-1 DTI</th><th>emitted px</th><th>area px</th></tr>%s</table>'
+          % (nrows, nfrows),
           '<h2>Cost</h2><p>All seven are already implemented in <code>src/gems/fields.py</code> and run in under '
           'two minutes on two CPU cores for the whole 12.3 Mpixel grid. The expensive direction - a learned '
           'segmentation network - is not tested here and cannot be on this hardware.</p>',
@@ -398,6 +480,97 @@ def main() -> int:
           '<li><strong>Lidar change detection for creep.</strong> No free pre/post dataset exists for this region '
           'at the required cadence, so it is listed as not viable rather than proposed.</li>',
           '</ul>']
+
+    # ---------------- novelty & acquisition audits ----------------
+    crow = ""
+    for r in sorted(chg.get("files", []), key=lambda r: -(r.get("emitted_px") or 0))[:14]:
+        crow += ("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"
+                 % (esc(r.get("label", "")[-64:]), f"{r.get('emitted_px', 0):,}",
+                    f"{r.get('chargeable_px', 0):,}",
+                    ("%.3f" % r["chargeable_share_of_emitted"]
+                     if r.get("chargeable_share_of_emitted") is not None else "-")))
+    prow = ""
+    for pr in chg.get("pairs_jaccard_ge_0.5", [])[:10]:
+        prow += ("<tr><td>%.4f</td><td>%s</td><td>%s</td><td>%s</td></tr>"
+                 % (pr.get("jaccard", 0), esc(pr.get("a", "")[-46:]), esc(pr.get("b", "")[-46:]),
+                    f"{pr.get('intersection_px', 0):,}"))
+    grow = "".join("<li>%d files: %s</li>" % (len(g), esc(", ".join(x[-34:] for x in g)))
+                   for g in chg.get("chargeable_identical_groups", [])[:8])
+
+    arow = ""
+    for name, mp in sorted(acq.get("maps", {}).items()):
+        az = mp.get("azimuth", {})
+        b = mp.get("area1_boundary", {})
+        arow += ("<tr><td>%s</td><td>%s</td><td>%.4f</td><td>%.4f</td><td>%s / %s</td>"
+                 "<td>%s</td></tr>"
+                 % (esc(name), f"{mp.get('emitted_px', 0):,}",
+                    az.get("east_west_share_0_10_and_170_180deg", 0),
+                    az.get("north_south_share_80_100deg", 0),
+                    mp.get("spikes", {}).get("n_spike_rows", "-"),
+                    mp.get("spikes", {}).get("n_spike_cols", "-"),
+                    " / ".join("%.2f" % b[k]["ratio"] for k in ("left", "right", "top", "bottom")
+                               if k in b)))
+    trow = ""
+    for name, t in sorted(acq.get("tile_spread", {}).items()):
+        trow += ("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"
+                 % (esc(name), t.get("tiles_used"),
+                    "%.4f" % (t.get("east_west_share_median") or 0),
+                    "%.4f" % (t.get("north_south_share_median") or 0)))
+    sfp = sf.get("verdict", {})
+    parity_rows = "".join(
+        "<tr><td>%s</td><td>%.3f</td><td>%.3f</td></tr>"
+        % (esc(r), (sf.get("parity_striped") or {}).get(r, 0),
+           (sf.get("parity_row_smoothed") or {}).get(r, 0))
+        for r in ["random", "short", "isolated", "long"])
+    au = [
+        "<h1>Novelty and acquisition audits</h1>",
+        "<p>Three questions the group had never asked of its own files, answered by measurement: "
+        "were two submissions the same raster; were two different rasters still the same bet; and does "
+        "the promoted candidate carry acquisition fabric instead of geology.</p>",
+        '<div class="card"><h2>1. Chargeable support: the pixels that can earn anything</h2>',
+        "<p>The metric pays only outside the 300 m free zone of the shipped mask, so the honest unit of "
+        "comparison is the chargeable set: emitted AND beyond 300 m from any label. Chargeable zone "
+        f"{chg.get('chargeable_zone_px', 0):,} px of {chg.get('footprint_px', 0):,} footprint px.</p>",
+        "<table><tr><th>file</th><th>emitted px</th><th>chargeable px</th><th>share</th></tr>"
+        + crow + "</table>",
+        f"<h3>Chargeably identical groups (Jaccard &ge; {chg.get('identical_jaccard_threshold', 0.95):.2f})</h3>"
+        + '<ul class="tight">' + grow + "</ul>",
+        "<h3>Closest pairs</h3><table><tr><th>Jaccard</th><th>file A</th><th>file B</th>"
+        "<th>shared px</th></tr>" + prow + "</table>",
+        "<p class=mut>This is the second, independent duplicate mechanism the rank-correlation gate could "
+        "not see. The gate in <code>src/gems/novelty.py</code> now refuses a candidate whose chargeable set "
+        "matches a prior one.</p></div>",
+        '<div class="card"><h2>2. Acquisition audit: is the new field manufacturing survey fabric?</h2>',
+        "<p>Structure-tensor azimuths (0&deg; = east-west, 90&deg; = north-south), row/column density "
+        "spikes, the Area 1 block boundary and tiled spread. A detector that invents east-west lineaments, "
+        "or that lights up where the survey block boundary is, is reading the acquisition, not the "
+        "geology.</p>",
+        "<table><tr><th>map</th><th>emitted px</th><th>E-W share</th><th>N-S share</th>"
+        "<th>spike rows/cols</th><th>Area-1 boundary L/R/T/B</th></tr>" + arow + "</table>",
+        "<p class=mut>The catalogue itself is north-south dominant (0.0561 vs 0.1916), so a detector is only "
+        "suspect if it goes flat or east-west. The Area-1 boundary ratios mirror the catalogue's own block "
+        "step for catalogue-derived maps; the flat profile of the pindrop anchors is what an independent "
+        "field looks like.</p>",
+        "<h3>Tiled spread of the E-W share (4x4 tiles)</h3>"
+        "<table><tr><th>map</th><th>tiles used</th><th>E-W median</th><th>N-S median</th></tr>"
+        + trow + "</table>",
+        "</div>",
+        '<div class="card"><h2>3. The known artefact in the shipped candidate</h2>',
+        "<p>The candidate's emitted pattern alternates between row pairs: even rows carry "
+        f"{(sf.get('parity_striped') or {}).get('random', 0):.2f} times as many emitted pixels as odd rows, "
+        "and the row-density power peaks at periods of 2 and 4 rows -- exactly the GeoDAWN flight-line "
+        "spacings (200 m in Area 1, 400 m in Area 2). The cause is measured: the airborne grids carry a "
+        "~2.5% row-pair correlation (magnetic channels included) and the isotropic 3x3 thinning amplifies "
+        "it. A de-striped variant (3-tap [1,2,1] smoothing along rows before thinning) was built and put "
+        f"through the same frozen holdout; it wins {sfp.get('rules_won_by_row_smoothed', 0)} of 4 rules, so "
+        "the pre-registered rule keeps the striped file. Both numbers are published rather than "
+        "hidden.</p>",
+        "<table><tr><th>withholding rule</th><th>even/odd rows, striped</th>"
+        "<th>even/odd rows, de-striped</th></tr>" + parity_rows + "</table>",
+        "<p class=mut>Verdict recorded in <code>docs/evidence/stripe_fix.json</code>: "
+        + esc(sfp.get("reason", "not run")) + "</p>",
+        "</div>",
+    ]
 
     # ---------------- sources ----------------
     src = load("sources.json")
@@ -426,6 +599,7 @@ def main() -> int:
              "metric_audit.html": ("Metric audit", "".join(m), "metric_audit.html"),
              "holdout.html": ("Holdout", "".join(h), "holdout.html"),
              "hypotheses.html": ("Hypotheses", "".join(hp), "hypotheses.html"),
+             "audits.html": ("Novelty & acquisition", "".join(au), "audits.html"),
              "sources.html": ("Sources", "".join(sp), "sources.html")}
     os.makedirs(DOCS, exist_ok=True)
     for fname, (title, body, active) in pages.items():

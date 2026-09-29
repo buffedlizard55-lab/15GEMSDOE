@@ -1,0 +1,124 @@
+{
+ "generated_utc": "20260929T010046Z",
+ "hypothesis": "a 3-tap row smoothing before thinning removes the flight-line row-pairing without losing ridge amplitude",
+ "protocol": {
+  "withhold_fraction": 0.2,
+  "seed": 0,
+  "collar_px": 3,
+  "areas_px": [
+   50000,
+   100000,
+   200000
+  ],
+  "rules": [
+   "random",
+   "short",
+   "isolated",
+   "long"
+  ],
+  "promotion_rule": "de-striped variant replaces the striped one only if it wins stage 1 and >=3 of the 4 stage-2 rules with leakage < 0.02 everywhere"
+ },
+ "stage1": {
+  "random": {
+   "striped": {
+    "dti": 0.053022,
+    "emitted_px": 99999,
+    "target_area_px": 100000,
+    "leakage_probe_dilate1_dti": 0.0,
+    "even_rows_px": 67252,
+    "odd_rows_px": 32747,
+    "even_over_odd": 2.053684306959416
+   },
+   "row_smoothed": {
+    "dti": 0.05225,
+    "emitted_px": 99999,
+    "target_area_px": 100000,
+    "leakage_probe_dilate1_dti": 0.0,
+    "even_rows_px": 54938,
+    "odd_rows_px": 45061,
+    "even_over_odd": 1.2191917622778012
+   }
+  },
+  "short": {
+   "striped": {
+    "dti": 0.040962,
+    "emitted_px": 99999,
+    "target_area_px": 200000,
+    "leakage_probe_dilate1_dti": 0.0,
+    "even_rows_px": 67252,
+    "odd_rows_px": 32747,
+    "even_over_odd": 2.053684306959416
+   },
+   "row_smoothed": {
+    "dti": 0.041147,
+    "emitted_px": 99999,
+    "target_area_px": 200000,
+    "leakage_probe_dilate1_dti": 0.0,
+    "even_rows_px": 54938,
+    "odd_rows_px": 45061,
+    "even_over_odd": 1.2191917622778012
+   }
+  },
+  "isolated": {
+   "striped": {
+    "dti": 0.063225,
+    "emitted_px": 99999,
+    "target_area_px": 200000,
+    "leakage_probe_dilate1_dti": 0.0,
+    "even_rows_px": 67252,
+    "odd_rows_px": 32747,
+    "even_over_odd": 2.053684306959416
+   },
+   "row_smoothed": {
+    "dti": 0.064048,
+    "emitted_px": 99999,
+    "target_area_px": 200000,
+    "leakage_probe_dilate1_dti": 0.0,
+    "even_rows_px": 54938,
+    "odd_rows_px": 45061,
+    "even_over_odd": 1.2191917622778012
+   }
+  },
+  "long": {
+   "striped": {
+    "dti": 0.065444,
+    "emitted_px": 99999,
+    "target_area_px": 100000,
+    "leakage_probe_dilate1_dti": 0.0,
+    "even_rows_px": 67252,
+    "odd_rows_px": 32747,
+    "even_over_odd": 2.053684306959416
+   },
+   "row_smoothed": {
+    "dti": 0.064434,
+    "emitted_px": 99999,
+    "target_area_px": 100000,
+    "leakage_probe_dilate1_dti": 0.0,
+    "even_rows_px": 54938,
+    "odd_rows_px": 45061,
+    "even_over_odd": 1.2191917622778012
+   }
+  }
+ },
+ "stage2": {},
+ "parity": {},
+ "verdict": {
+  "rules_won_by_row_smoothed": 2,
+  "rules_tested": 4,
+  "leakage_ok": true,
+  "parity_striped": {
+   "random": 2.053684306959416,
+   "short": 2.053684306959416,
+   "isolated": 2.053684306959416,
+   "long": 2.053684306959416
+  },
+  "parity_row_smoothed": {
+   "random": 1.2191917622778012,
+   "short": 1.2191917622778012,
+   "isolated": 1.2191917622778012,
+   "long": 1.2191917622778012
+  },
+  "replace_striped_with_row_smoothed": false,
+  "reason": "not replaced: wins 2/4, stage-1 striped 0.05302 vs row-smoothed 0.05225, leakage_ok=True"
+ }
+}
