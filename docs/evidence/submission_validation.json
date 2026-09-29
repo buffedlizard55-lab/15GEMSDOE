@@ -1,5 +1,5 @@
 {
- "file": "/home/user/15GEMSDOE/docs/downloads/gems-cleanup-a-20260928T195952Z-curv_scarp.tif",
+ "file": "/home/user/15GEMSDOE/docs/downloads/gems-tso1-20260929T005627Z-conj_alteration_mag.tif",
  "checks": {
   "R1_crs_epsg32611": {
    "passed": true,
@@ -97,7 +97,7 @@
    4508550.0
   ]
  },
- "emitted_px": 362327,
+ "emitted_px": 99999,
  "finite_px": 5167373,
- "fraction_emitted_of_footprint": 0.07011822061229178
+ "fraction_emitted_of_footprint": 0.019351999555673648
 }

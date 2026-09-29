@@ -52,6 +52,29 @@ def main() -> int:
         print("index.html does not state the validator verdict")
         ok = False
 
+    # the download button must serve the newest manifest, and the audits page must
+    # carry the chargeable numbers it is allowed to state
+    dldir = os.path.join(ROOT, "docs", "downloads")
+    mans = [json.load(open(os.path.join(dldir, f)))
+            for f in sorted(os.listdir(dldir)) if f.endswith(".manifest.json")]
+    if mans:
+        newest = max(mans, key=lambda mm: str(mm.get("generated_utc", "")))
+        href = 'href="downloads/%s"' % os.path.basename(newest.get("file", ""))
+        if href not in idx and "downloads/%s" % os.path.basename(newest.get("file", "")) not in idx:
+            print("index.html does not offer the newest manifest file: %s" % newest.get("file"))
+            ok = False
+        if newest.get("sha256", "")[:8] and newest["sha256"][:8] not in idx:
+            print("index.html does not carry the newest file's SHA-256 prefix")
+            ok = False
+    chg = json.load(open(os.path.join(EV, "chargeable_support.json")))
+    audits = read(os.path.join(ROOT, "docs", "audits.html"))
+    if f"{chg['chargeable_zone_px']:,}" not in audits:
+        print("audits.html does not carry the chargeable-zone pixel count")
+        ok = False
+    if len(chg.get("chargeable_identical_groups", [])) and "chargeably identical" not in audits.lower():
+        print("audits.html does not explain the chargeable-identity mechanism")
+        ok = False
+
     print("check_site: %s" % ("OK" if ok else "FAILED"))
     return 0 if ok else 1
 

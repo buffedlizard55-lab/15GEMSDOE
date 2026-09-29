@@ -1,192 +1,236 @@
 {
-  "_purpose": "Every claim this project makes about the competition traces to one of these rows. Each row carries the URL, the date it was retrieved, and the verbatim text it is used for. Rows marked retrieved_this_session=true were re-fetched and re-read on 2026-09-28; rows marked false were retrieved earlier and are quoted only where another retrieved source corroborates them.",
-  "retrieved_date": "2026-09-28",
-  "sources": [
-    {
-      "id": "S1",
-      "kind": "competition_homepage",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "Competition End Date: Dec. 3, 2026, 11:59 p.m. UTC",
-        "Total Prize Pool: $300,000",
-        "Initial Prize Round - $50,000. Top 5 participants on private test set. 1st - 5th Place (each) $10,000",
-        "Final Prize Round - $250,000. Top 5 participants on re-labeled dataset. 1st $100,000, 2nd $70,000, 3rd $40,000, 4th $25,000, 5th $15,000",
-        "The same submission is scored twice - once against a private expert-labeled test set for the Initial Prize Round, and again against an expanded label set built from expert review of all submissions for the Final Prize Round.",
-        "A unique feature of this challenge is that there is spatial overlap between the training dataset (the USGS quaternary fault dataset) and the test dataset (newly identified faults within the GeoDAWN region).",
-        "The use of external data is encouraged in this competition, provided you or your team possess the necessary licenses to use the data for this challenge."
-      ],
-      "used_for": "prize structure, deadline, the fact that the same file is scored twice, external-data policy"
-    },
-    {
-      "id": "S2",
-      "kind": "problem_description",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "your task is to develop models and algorithms that provide accurate information about the presence of structures that are indicative of geothermal resources-namely, geological faults",
-        "we have consulted with fault experts who have manually identified faults that are not contained within the current public USGS database. These new faults will comprise the test dataset for the initial prize round of the challenge.",
-        "An expert panel then uses submitted predictions to update fault labels for the full region. Submissions are then rescored against the entire updated label set for the Final Prize Round awards.",
-        "This GeoTIFF is in a projected coordinate system for UTM zone 11N (EPSG 32611) at 100m resolution.",
-        "For this competition, we set alpha=0.2 and beta=0.8, which reduces the penalty for false positive predictions and increases the penalty for false negative predictions.",
-        "TP_w = 3.00, FP_w = 1.89, FN_w = 2.00",
-        "TI_w(alpha=0.2, beta=0.8) = 3.00 / (3.00 + 0.2*1.89 + 0.8*2.00) = 0.60",
-        "k(d) = (1-d/R)_+ = max(1 - d/R, 0) where the range R is 300 meters (i.e., 3 pixels at 100m resolution)",
-        "Your submission is in the same projected coordinate reference system as the training data (projected coordinate system for UTM zone 11N, EPSG 32611)",
-        "Your submission is at the same resolution as the training data (100m)",
-        "Your submission has the same bounds as the training data, and data outside the bounds is null or nan.",
-        "Your submission contains a single layer with datatype of 32-bit float (float32) with values between 0 and 1 indicating the confidence or probability of fault presence, with higher values indicating higher probability.",
-        "A sample submission that predicts total fault absence is provided for your reference on the data download page.",
-        "The labels for this challenge come from the USGS quaternary fault maps and from INGENIOUS."
-      ],
-      "used_for": "task definition, metric transcription, worked example, submission contract, label provenance",
-      "note": "The sample-submission sentence is contradicted by the shipped bytes: sample_submission.tif contains 60,988 cells equal to 1.0, exactly the known-fault cells, not an all-zero raster. Measured in docs/evidence/data_verification.json. Flagged in AUDIT.md as irregularity I-4."
-    },
-    {
-      "id": "S3",
-      "kind": "organizer_statement",
-      "url": "https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516/2",
-      "author": "chrisk-dd (DrivenData Staff), 2026-09-16",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "Pixels corresponding to known USGS/INGENIOUS faults are masked / excluded from evaluation, so they do not count towards penalty terms.",
-        "Re-evaluation will also mask/exclude the existing USGS/INGENIOUS faults.",
-        "We'll consider changing the description, but for scoring purposes it should not matter whether these known faults are included with predictions or not."
-      ],
-      "used_for": "the mask exists and applies in both rounds; masked pixels are score-neutral (S1-3 of holdout.py)"
-    },
-    {
-      "id": "S4",
-      "kind": "organizer_statement",
-      "url": "https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516/4",
-      "author": "chrisk-dd (DrivenData Staff), 2026-09-21",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "The mask is indeed pixel-exact - it is identical to the provided set of training fault labels.",
-        "Only new-fault ground truth is considered for scoring purposes. A predicted pixel that is near a known fault trace but far from a new-fault ground truth pixel will be fully penalized, i.e., the buffer does not apply to known faults.",
-        "A new-fault ground truth pixel can indeed lie within 300m of a known fault trace. Such pixels would constitute corrections or modifications to existing fault traces. Identifying these corrections is one outcome we are aiming for as part of this competition. Such corrections may already exist in the new-fault set, and may also exist in the final round evaluation set."
-      ],
-      "used_for": "the three statements the user asked to be verified; the mask geometry; the FP regime; the target class definition"
-    },
-    {
-      "id": "S5",
-      "kind": "organizer_statement",
-      "url": "https://community.drivendata.org/t/where-do-you-draw-the-line/11536/2",
-      "author": "chrisk-dd (DrivenData Staff), 2026-09-23",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "For the purposes of this competition, \"new fault\" means \"any fault pixel not already captured by USGS/INGENIOUS\" and can include newly mapped geometry of an existing fault system."
-      ],
-      "used_for": "the definition of the positive class",
-      "note": "The words 'extensions', 'splays' and 'parallel strands' appear in moongrega's question (post 1), not in the organizer's answer. The answer covers them only through 'newly mapped geometry of an existing fault system'. The user's paraphrase is faithful in substance but attributes the vocabulary to the organizer; flagged in AUDIT.md as irregularity I-3."
-    },
-    {
-      "id": "S6",
-      "kind": "organizer_statement",
-      "url": "https://community.drivendata.org/t/how-were-the-new-test-faults-identified-data-sources-and-fault-types/11527/7",
-      "author": "chrisk-dd (DrivenData Staff), 2026-09-23",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "We're not sharing details about the data sources, fault types, or coverage behind the test faults beyond what's in the problem description.",
-        "Note that the largest prize pool (Phase 2) will use a test set that is updated by expert review of all Phase 1 submissions, so your fault predictions have an impact on final evaluation even if they are not the most performant in Phase 1."
-      ],
-      "used_for": "confirms the organizers declined to say; and the strategic fact that predictions influence the final-round label set"
-    },
-    {
-      "id": "S7",
-      "kind": "organizer_statement",
-      "url": "https://community.drivendata.org/t/weekly-submissions/11524/2",
-      "author": "chrisk-dd (DrivenData Staff), 2026-09-17",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "The submission allowance resets based on a rolling window, not at a specific date and time."
-      ],
-      "used_for": "submission budgeting"
-    },
-    {
-      "id": "S8",
-      "kind": "official_rules_pdf",
-      "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "The U.S. Department of Energy's (DOE) Geologic Enhanced Mapping System (GEMS) Prize is governed by 15 U.S.C. section 3719 and this official rules document."
-      ],
-      "used_for": "rule provenance",
-      "note": "Only page-range 1 of 7 was read this session (title, Preface, Contents, start of section 1). Sections 3.3 Algorithm and Testing, 3.4 Feedback and 3.5 What To Submit were NOT read and are not relied on. Listed as an open item."
-    },
-    {
-      "id": "S9",
-      "kind": "leaderboard",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "DARD - Best public DW-Tversky 0.3168 - 1d 2h ago - 11 submissions",
-        "alexoktaba - 0.2993 - 15 submissions",
-        "HardcoreTechGod - 0.2854 - 6 submissions",
-        "mzoorob - 0.2843 - 17 submissions",
-        "joeyfezster - 0.2806 - 14 submissions"
-      ],
-      "used_for": "the current leader, and the strategic constants that depend on it",
-      "note": "The user's brief states the top score is 0.3049. That was correct on 2026-09-27 and is stale on 2026-09-28: the same competitor is now at 0.3168. Flagged in AUDIT.md as irregularity I-1."
-    },
-    {
-      "id": "S10",
-      "kind": "feature_inventory",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#provided-features",
-      "retrieved_this_session": false,
-      "verbatim": [
-        "Surface conductivity and depth to conductive base surface",
-        "Detrended elevation and the slope of detrended elevation",
-        "Dilatation rate, shear strain rate, and the second invariant of the strain rate tensor",
-        "Isostatic gravity anomaly and the slope of the isostatic gravity anomaly",
-        "Magnetics including reduced-to-pole magnetic anomaly, total magnetic intensity, the vertical and horizontal slope of total magnetic intensity, and the top-of-crustal magnetic source depth estimate",
-        "Density of earthquakes"
-      ],
-      "used_for": "cross-check of the 19 band descriptions read directly from the shipped raster",
-      "note": "The per-band descriptions used by src/gems/fields.py were read from training_features.tif itself via its TIFF band descriptions, and are recorded in docs/evidence/data_verification.json. The prose list above matches them."
-    },
-    {
-      "id": "S11",
-      "kind": "transport_manifest",
-      "url": "https://github.com/buffedlizard55-lab/5GEMSDOE/blob/6e8d28ba407b5d748de5b3e94635c41d95e35354/data/bridge/manifest.json",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "purpose: transport the official competition rasters from an unrestricted runner into the egress-restricted dev sandbox via git; GitHub's 100 MB blob limit forces the feature stack to be split",
-        "gems-geodawn-numerical-features.tif sha256 4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
-        "existing_faults.tif sha256 7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
-        "example_submission.tif sha256 2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
-      ],
-      "used_for": "the SHA-256 pins this repository verifies against",
-      "note": "The rasters themselves are published by the team, not by DrivenData. The pins were recorded when an unrestricted runner inventoried the official data tab; they are reproduced here only as a byte-integrity check, never as proof of origin. Flagged in AUDIT.md as irregularity I-2."
-    },
-    {
-      "id": "S12",
-      "kind": "reference_solution",
-      "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
-      "retrieved_this_session": true,
-      "verbatim": [],
-      "used_for": "known organiser-sanctioned starting point",
-      "note": "Cloned and confirmed to exist (3.5 MB). Its contents were NOT read this session, so nothing in this repository depends on it. Listed as an open item."
-    },
-    {
-      "id": "S13",
-      "kind": "forum_index",
-      "url": "https://community.drivendata.org/c/gems-prize-challenge/111",
-      "retrieved_this_session": true,
-      "verbatim": [
-        "Topic list, 2026-09-28: 'Using a teammate's geological interpretation as training labels' (11543, 0 replies), 'Team member eligibility' (11540, 0 replies), 'How were the new test faults identified?' (11527, 9 replies), 'Paid for external data license' (11528, 1 reply), 'Where do you draw the line?' (11536, 1 reply), 'Why does the Training fault labels file have a single band, while the labels in the reference solution repo have 19 bands?' (11529, 1 reply), 'Scoring clarification...' (11516, 3 replies)"
-      ],
-      "used_for": "knowing which threads exist; 11529 and 11543 were not read"
-    }
-  ],
-  "not_yet_verified": [
-    "https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/ (about/resources page)",
-    "https://www.drivendata.org/competitions/306/competition-doe-gems/data/ (data tab; requires login)",
-    "https://www.drivendata.org/competitions/306/competition-doe-gems/rules/ (rules page)",
-    "https://docs.nlr.gov/docs/fy26osti/96647.pdf sections 3.3-3.5 and Appendix A (pages 2-7 of 7)",
-    "https://community.drivendata.org/t/why-does-...-labels-in-the-reference-solution-repo-have-19-bands/11529 (the single-band vs 19-band question -- directly relevant to how the mask was rasterised)",
-    "https://community.drivendata.org/t/using-a-teammates-geological-interpretation-as-training-labels/11543 (legality of using another competitor's map as labels)",
-    "https://gdr.openei.org/submissions/1391",
-    "https://www.energy.gov/hgeo/geothermal/articles/office-geothermal-announces-geologic-enhanced-mapping-system-gems-prize"
-  ]
+ "_purpose": "Every claim this project makes about the competition traces to one of these rows. Each row carries the URL, the date it was retrieved, and the verbatim text it is used for. Rows marked retrieved_this_session=true were re-fetched and re-read on 2026-09-28; rows marked false were retrieved earlier and are quoted only where another retrieved source corroborates them.",
+ "retrieved_date": "2026-09-28",
+ "sources": [
+  {
+   "id": "S1",
+   "kind": "competition_homepage",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "Competition End Date: Dec. 3, 2026, 11:59 p.m. UTC",
+    "Total Prize Pool: $300,000",
+    "Initial Prize Round - $50,000. Top 5 participants on private test set. 1st - 5th Place (each) $10,000",
+    "Final Prize Round - $250,000. Top 5 participants on re-labeled dataset. 1st $100,000, 2nd $70,000, 3rd $40,000, 4th $25,000, 5th $15,000",
+    "The same submission is scored twice - once against a private expert-labeled test set for the Initial Prize Round, and again against an expanded label set built from expert review of all submissions for the Final Prize Round.",
+    "A unique feature of this challenge is that there is spatial overlap between the training dataset (the USGS quaternary fault dataset) and the test dataset (newly identified faults within the GeoDAWN region).",
+    "The use of external data is encouraged in this competition, provided you or your team possess the necessary licenses to use the data for this challenge."
+   ],
+   "used_for": "prize structure, deadline, the fact that the same file is scored twice, external-data policy"
+  },
+  {
+   "id": "S2",
+   "kind": "problem_description",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "your task is to develop models and algorithms that provide accurate information about the presence of structures that are indicative of geothermal resources-namely, geological faults",
+    "we have consulted with fault experts who have manually identified faults that are not contained within the current public USGS database. These new faults will comprise the test dataset for the initial prize round of the challenge.",
+    "An expert panel then uses submitted predictions to update fault labels for the full region. Submissions are then rescored against the entire updated label set for the Final Prize Round awards.",
+    "This GeoTIFF is in a projected coordinate system for UTM zone 11N (EPSG 32611) at 100m resolution.",
+    "For this competition, we set alpha=0.2 and beta=0.8, which reduces the penalty for false positive predictions and increases the penalty for false negative predictions.",
+    "TP_w = 3.00, FP_w = 1.89, FN_w = 2.00",
+    "TI_w(alpha=0.2, beta=0.8) = 3.00 / (3.00 + 0.2*1.89 + 0.8*2.00) = 0.60",
+    "k(d) = (1-d/R)_+ = max(1 - d/R, 0) where the range R is 300 meters (i.e., 3 pixels at 100m resolution)",
+    "Your submission is in the same projected coordinate reference system as the training data (projected coordinate system for UTM zone 11N, EPSG 32611)",
+    "Your submission is at the same resolution as the training data (100m)",
+    "Your submission has the same bounds as the training data, and data outside the bounds is null or nan.",
+    "Your submission contains a single layer with datatype of 32-bit float (float32) with values between 0 and 1 indicating the confidence or probability of fault presence, with higher values indicating higher probability.",
+    "A sample submission that predicts total fault absence is provided for your reference on the data download page.",
+    "The labels for this challenge come from the USGS quaternary fault maps and from INGENIOUS."
+   ],
+   "used_for": "task definition, metric transcription, worked example, submission contract, label provenance",
+   "note": "The sample-submission sentence is contradicted by the shipped bytes: sample_submission.tif contains 60,988 cells equal to 1.0, exactly the known-fault cells, not an all-zero raster. Measured in docs/evidence/data_verification.json. Flagged in AUDIT.md as irregularity I-4."
+  },
+  {
+   "id": "S3",
+   "kind": "organizer_statement",
+   "url": "https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516/2",
+   "author": "chrisk-dd (DrivenData Staff), 2026-09-16",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "Pixels corresponding to known USGS/INGENIOUS faults are masked / excluded from evaluation, so they do not count towards penalty terms.",
+    "Re-evaluation will also mask/exclude the existing USGS/INGENIOUS faults.",
+    "We'll consider changing the description, but for scoring purposes it should not matter whether these known faults are included with predictions or not."
+   ],
+   "used_for": "the mask exists and applies in both rounds; masked pixels are score-neutral (S1-3 of holdout.py)"
+  },
+  {
+   "id": "S4",
+   "kind": "organizer_statement",
+   "url": "https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516/4",
+   "author": "chrisk-dd (DrivenData Staff), 2026-09-21",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "The mask is indeed pixel-exact - it is identical to the provided set of training fault labels.",
+    "Only new-fault ground truth is considered for scoring purposes. A predicted pixel that is near a known fault trace but far from a new-fault ground truth pixel will be fully penalized, i.e., the buffer does not apply to known faults.",
+    "A new-fault ground truth pixel can indeed lie within 300m of a known fault trace. Such pixels would constitute corrections or modifications to existing fault traces. Identifying these corrections is one outcome we are aiming for as part of this competition. Such corrections may already exist in the new-fault set, and may also exist in the final round evaluation set."
+   ],
+   "used_for": "the three statements the user asked to be verified; the mask geometry; the FP regime; the target class definition"
+  },
+  {
+   "id": "S5",
+   "kind": "organizer_statement",
+   "url": "https://community.drivendata.org/t/where-do-you-draw-the-line/11536/2",
+   "author": "chrisk-dd (DrivenData Staff), 2026-09-23",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "For the purposes of this competition, \"new fault\" means \"any fault pixel not already captured by USGS/INGENIOUS\" and can include newly mapped geometry of an existing fault system."
+   ],
+   "used_for": "the definition of the positive class",
+   "note": "The words 'extensions', 'splays' and 'parallel strands' appear in moongrega's question (post 1), not in the organizer's answer. The answer covers them only through 'newly mapped geometry of an existing fault system'. The user's paraphrase is faithful in substance but attributes the vocabulary to the organizer; flagged in AUDIT.md as irregularity I-3."
+  },
+  {
+   "id": "S6",
+   "kind": "organizer_statement",
+   "url": "https://community.drivendata.org/t/how-were-the-new-test-faults-identified-data-sources-and-fault-types/11527/7",
+   "author": "chrisk-dd (DrivenData Staff), 2026-09-23",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "We're not sharing details about the data sources, fault types, or coverage behind the test faults beyond what's in the problem description.",
+    "Note that the largest prize pool (Phase 2) will use a test set that is updated by expert review of all Phase 1 submissions, so your fault predictions have an impact on final evaluation even if they are not the most performant in Phase 1."
+   ],
+   "used_for": "confirms the organizers declined to say; and the strategic fact that predictions influence the final-round label set"
+  },
+  {
+   "id": "S7",
+   "kind": "organizer_statement",
+   "url": "https://community.drivendata.org/t/weekly-submissions/11524/2",
+   "author": "chrisk-dd (DrivenData Staff), 2026-09-17",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "The submission allowance resets based on a rolling window, not at a specific date and time."
+   ],
+   "used_for": "submission budgeting"
+  },
+  {
+   "id": "S8",
+   "kind": "official_rules_pdf",
+   "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "The U.S. Department of Energy's (DOE) Geologic Enhanced Mapping System (GEMS) Prize is governed by 15 U.S.C. section 3719 and this official rules document."
+   ],
+   "used_for": "rule provenance",
+   "note": "Only page-range 1 of 7 was read this session (title, Preface, Contents, start of section 1). Sections 3.3 Algorithm and Testing, 3.4 Feedback and 3.5 What To Submit were NOT read and are not relied on. Listed as an open item."
+  },
+  {
+   "id": "S9",
+   "kind": "leaderboard",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "DARD - Best public DW-Tversky 0.3168 - 1d 2h ago - 11 submissions",
+    "alexoktaba - 0.2993 - 15 submissions",
+    "HardcoreTechGod - 0.2854 - 6 submissions",
+    "mzoorob - 0.2843 - 17 submissions",
+    "joeyfezster - 0.2806 - 14 submissions"
+   ],
+   "used_for": "the current leader, and the strategic constants that depend on it",
+   "note": "The user's brief states the top score is 0.3049. That was correct on 2026-09-27 and is stale on 2026-09-28: the same competitor is now at 0.3168. Flagged in AUDIT.md as irregularity I-1."
+  },
+  {
+   "id": "S10",
+   "kind": "feature_inventory",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#provided-features",
+   "retrieved_this_session": false,
+   "verbatim": [
+    "Surface conductivity and depth to conductive base surface",
+    "Detrended elevation and the slope of detrended elevation",
+    "Dilatation rate, shear strain rate, and the second invariant of the strain rate tensor",
+    "Isostatic gravity anomaly and the slope of the isostatic gravity anomaly",
+    "Magnetics including reduced-to-pole magnetic anomaly, total magnetic intensity, the vertical and horizontal slope of total magnetic intensity, and the top-of-crustal magnetic source depth estimate",
+    "Density of earthquakes"
+   ],
+   "used_for": "cross-check of the 19 band descriptions read directly from the shipped raster",
+   "note": "The per-band descriptions used by src/gems/fields.py were read from training_features.tif itself via its TIFF band descriptions, and are recorded in docs/evidence/data_verification.json. The prose list above matches them."
+  },
+  {
+   "id": "S11",
+   "kind": "transport_manifest",
+   "url": "https://github.com/buffedlizard55-lab/5GEMSDOE/blob/6e8d28ba407b5d748de5b3e94635c41d95e35354/data/bridge/manifest.json",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "purpose: transport the official competition rasters from an unrestricted runner into the egress-restricted dev sandbox via git; GitHub's 100 MB blob limit forces the feature stack to be split",
+    "gems-geodawn-numerical-features.tif sha256 4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+    "existing_faults.tif sha256 7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+    "example_submission.tif sha256 2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
+   ],
+   "used_for": "the SHA-256 pins this repository verifies against",
+   "note": "The rasters themselves are published by the team, not by DrivenData. The pins were recorded when an unrestricted runner inventoried the official data tab; they are reproduced here only as a byte-integrity check, never as proof of origin. Flagged in AUDIT.md as irregularity I-2."
+  },
+  {
+   "id": "S12",
+   "kind": "reference_solution",
+   "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
+   "retrieved_this_session": true,
+   "verbatim": [],
+   "used_for": "known organiser-sanctioned starting point",
+   "note": "Cloned and confirmed to exist (3.5 MB). Its contents were NOT read this session, so nothing in this repository depends on it. Listed as an open item."
+  },
+  {
+   "id": "S13",
+   "kind": "forum_index",
+   "url": "https://community.drivendata.org/c/gems-prize-challenge/111",
+   "retrieved_this_session": true,
+   "verbatim": [
+    "Topic list, 2026-09-28: 'Using a teammate's geological interpretation as training labels' (11543, 0 replies), 'Team member eligibility' (11540, 0 replies), 'How were the new test faults identified?' (11527, 9 replies), 'Paid for external data license' (11528, 1 reply), 'Where do you draw the line?' (11536, 1 reply), 'Why does the Training fault labels file have a single band, while the labels in the reference solution repo have 19 bands?' (11529, 1 reply), 'Scoring clarification...' (11516, 3 replies)"
+   ],
+   "used_for": "knowing which threads exist; 11529 and 11543 were not read"
+  },
+  {
+   "id": "S14",
+   "url": "https://gdr.openei.org/submissions/1391",
+   "kind": "state_geothermal_data_repository",
+   "author": "U.S. DOE Geothermal Data Repository (GDR), submission 1391",
+   "retrieved_this_session": "2026-09-29 (text read via the page fetch; no binary download possible in this sandbox)",
+   "license": "CC BY 4.0 (as stated on the submission page)",
+   "verbatim": [
+    "License: CC BY 4.0",
+    "supersedes v1"
+   ],
+   "used_for": "INGENIOUS Great Basin Regional Dataset Compilation; list of free official products (2 m temperature probes, paleo-geothermal features, heat flow, conductive models, volcanics, gravity/magnetics, slip/dilation tendency) that are named-but-not-fetched; Quaternary Faults v2 provenance. Transported copies of the radiometric and QFaults products actually used here live in the sibling repository pins."
+  },
+  {
+   "id": "S15",
+   "url": "https://doi.org/10.5066/P93LGLVQ",
+   "kind": "usgs_data_release",
+   "author": "Glen, J.M.G., and Earney, T.E., 2024, USGS data release",
+   "retrieved_this_session": "2026-09-29 (landing page)",
+   "license": "USGS data release page states the work is marked with CC0 1.0 Universal",
+   "verbatim": [
+    "GeoDAWN: Airborne magnetic and radiometric surveys of the northwestern Great Basin, Nevada and California"
+   ],
+   "used_for": "Source of the contractor Th/K, U/K, U/Th, TMI_up150 and K/Th/U/TC grids that carry the new information in the promoted candidate; flight-line design (200 m lines Area 1, 400 m Area 2) explains the 2/4-pixel row pattern found in the acquisition audit."
+  },
+  {
+   "id": "S16",
+   "url": "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
+   "kind": "sciencebase_item",
+   "author": "USGS ScienceBase catalog item",
+   "retrieved_this_session": "2026-09-29 (item page; binaries unreachable from this sandbox -- curl exit 000)",
+   "verbatim": [
+    "Area 1 was flown with a nominal flight height targeted at 100 m above terrain over low-relief areas and 150 m over mountainous areas. Flight lines were spaced 200 m apart at an azimuth of 90 degrees"
+   ],
+   "used_for": "Confirms the survey design angle and line spacing that the acquisition audit tests the emitted maps against; confirms Area 1/Area 2 split and the two contractor grid geometries (50 m Area 1, 100 m Area 2)."
+  },
+  {
+   "id": "S17",
+   "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+   "kind": "official_rules_pdf",
+   "author": "U.S. Department of Energy, GEMS Prize official rules",
+   "retrieved_this_session": "2026-09-28/29 (sections 3.1-3.6 and A.1-A.4 read)",
+   "verbatim": [],
+   "used_for": "Sections 3.3 (labels built from the INGENIOUS compilation), 3.4 (three submissions per week; one final submission), 3.6.2 (single final submission used for both rounds), 3.2 (requirement that the extent of generative-AI use be indicated in the narrative) and A.5 (third-party content must be disclosed and the entrant must hold rights to authorise the sponsor's use). Sections 5-6 and the remainder of Appendix A are not yet read; the site does not claim them."
+  }
+ ],
+ "not_yet_verified": [
+  "https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/ (about/resources page)",
+  "https://www.drivendata.org/competitions/306/competition-doe-gems/data/ (data tab; requires login)",
+  "https://www.drivendata.org/competitions/306/competition-doe-gems/rules/ (rules page)",
+  "https://docs.nlr.gov/docs/fy26osti/96647.pdf sections 3.3-3.5 and Appendix A (pages 2-7 of 7)",
+  "https://community.drivendata.org/t/why-does-...-labels-in-the-reference-solution-repo-have-19-bands/11529 (the single-band vs 19-band question -- directly relevant to how the mask was rasterised)",
+  "https://community.drivendata.org/t/using-a-teammates-geological-interpretation-as-training-labels/11543 (legality of using another competitor's map as labels)",
+  "https://www.energy.gov/hgeo/geothermal/articles/office-geothermal-announces-geologic-enhanced-mapping-system-gems-prize"
+ ]
 }
